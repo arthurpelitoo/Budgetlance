@@ -1,0 +1,21 @@
+pro inicio de estruturação do projeto:
+
+composer.json (autoload)
+
+No composer.json, você mapeia sua pasta src (ou outra raiz de código):
+
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
+
+
+Depois roda:
+
+composer dump-autoload
+
+
+Isso gera automaticamente o autoload e você não precisa mais ficar dando require manual em cada classe.

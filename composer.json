@@ -1,7 +1,10 @@
 {
   "autoload": {
     "psr-4": {
-      "Src\\": "src/"
+      "Budgetlance\\": "./"
     }
+  },
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
   }
 }

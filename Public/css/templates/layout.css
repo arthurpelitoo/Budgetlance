@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --mainColor: #1F4E79;
+    --mainColorHover: #366087;
+    --textMainColor: #FFFFFF;
+
+    --secondColor: #F5F5F5;
+    --textSecondColor: #000000;
+
+    --CTAColor: #ffe868;
+    --CTAHoverColor: #ddc539;
+
+    --btnAndInputTextColor: #000000;
+    --btnAndInputTextColorHover: #FFFFFF;
+
+    --textColor: #F5F5F5;
+
+    --btnAndInputBackground: #F5F5F5;
+    --btnAndInputBackgroundhover: rgba(255, 255, 255, 0.61);
+    --btnBackgroundCtaColor: #FFE868;
+    --btnBackgroundCtaHoverColor: #DDC539;
+    --font-title: "Bebas Neue", sans-serif, arial;
+    --font-default: "Poppins", arial, sans-serif;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(221, 197, 57, 0.2); }
+  50% { box-shadow: 0 0 15px rgba(255, 232, 104, 0.664); }
+  100% { box-shadow: 0 0 5px rgba(221, 197, 57, 0.2); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--mainColor);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%; /* ocupa o maximo de espaço disponivel */
+    margin: 0 auto; /* equilibra e centraliza horizontalmente */
+    padding: 0 15px; /* distancia itens e logo horizontalmente da borda da tela */
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1000px) {
+    .container {
+        width: 1000px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+
+/* HEADER */
+.header {
+    width: 100%; /** ocupa a tela toda **/
+    z-index: 4; /** fica acima do conteúdo. **/
+    top: 0; /** gruda no topo da tela **/
+    left: 0; /** gruda na parte esquerda **/
+    background-color: var(--mainColor); /** cor de fundo **/
+    position: fixed;  /* fixa no topo ao rolar a tela */
+}
+
+.header .container .flex {
+    display: flex; /* coloca os filhos lado a lado (logo + menu) */
+    justify-content: space-between; /* mantêm espaço entre logo e menu */
+    align-items: center; /* centraliza verticalmente o conteúdo. */
+    height: 80px; /* tamanho do header. Disclaimer importante, se você mexe nesse cara ele passa por cima do conteúdo principal o que não é nem um pouco bacana */
+    /* valor padrao 80px */
+}
+
+.header .container .flex .flex-col1 {
+    flex-basis: 30%;
+    align-items: center;
+}
+
+.header .container .flex .flex-col1 .headerLogo {
+    display: block;
+    width: min-content;
+}
+
+.header .container .flex .flex-col1 .headerLogo img {
+    width: 150px;
+    height: auto;
+}
+
+.header .container .flex .flex-col2 {
+    flex-basis: 70%;
+    /* text-align: right; */
+}
+
+.header .container .flex .flex-col2 .header-menu {
+    display: none;
+}
+
+.header .container .flex .flex-col2 .header-nav {
+    display: block;
+    position: relative;
+    text-align: center;
+    justify-items: end;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li{
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
+    display: block;
+    background-color: var(--btnAndInputBackground);
+    color: var(--btnAndInputTextColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.3s;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
+    background-color: var(--btnAndInputBackgroundhover);
+    transform: translateY(-2px);
+}
+
+main{
+    padding-top: 80px; /* padding top para deixar o conteudo principal a mostra sem ficar embaixo do header. Disclaimer importante, se você mexe nesse cara ele fica por baixo do header o que não é nem um pouco bacana */
+    /* valor padrao 80px */
+    width: 100%;
+    position: relative;
+}
+
+
+/* footer */
+
+.footer{
+    position: relative;
+    background-color: var(--mainColor);
+    /* background: linear-gradient(180deg, var(--secondColor), var(--mainColor)); */
+    height: fit-content;
+    padding: 20px 0;
+    text-align: center;
+    z-index: 3;
+}
+
+.footer img{
+    width: 15%;
+}
+
+/* .footer a{
+    color: var(--terciaryColor);
+    font-size: 2.3em;
+    width: 2.3em;
+    text-decoration: none;
+    margin: 15px;
+    transition: all 0.3s;
+}
+
+.footer .footerClass .iconRedes a .itch-icon {
+    display: inline-block;
+    fill: var(--terciaryColor);
+    transition: all 0.3s;
+
+}
+
+.footer .footerClass .iconRedes a:hover .itch-icon{
+    fill: var(--accentHoverColor);
+}
+
+.footer a:hover{
+    color: var(--accentHoverColor);
+} */
+
+.footer .iconRedes{
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 30px;
+    color: var(--textColor);
+    font-family: var(--font-default);
+    align-items: center;
+    justify-content: center;
+}
+
+.footer .description{
+    line-height: 30px;
+    color: var(--textColor);
+    font-family: var(--font-default);
+}
+
+.footer .footerClass{
+    text-align: center;
+    margin: auto;
+}
+
+@media(max-width:1000px){
+
+    .header .container{
+        width: 90%;
+        margin: auto;
+    }
+
+    .header .container .flex .flex-col1{
+        flex-basis: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .header .container .flex .flex-col1 .headerLogo img {
+        width: 100px;
+    }
+
+    .header .container .flex .flex-col2 {
+        align-content: center;
+        flex-basis: 50%;
+    }
+
+    .header .container .flex .flex-col2 .header-menu {
+        display: block;
+        text-align: right;
+        position: relative;
+        top: 2.25px;
+        font-size: 20px;
+        color: var(--textColor);
+        transition: ease-in-out 0.3s;
+    }
+
+    .header .container .flex .flex-col2 .header-menu:hover {
+        color: var(--accentHoverColor);
+    }
+
+    .header .container .flex .flex-col2 .header-nav {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 80px; /* top para deixar o menu do mobile a mostra sem ficar em cima do header. Disclaimer importante, se você mexe nesse cara ele fica em cima do header o que não é nem um pouco bacana */
+        /* valor padrao 80px */
+        width: 100%;
+        text-align: center;
+        justify-content: none;
+    }
+
+    .header .container .flex .flex-col2 .header-nav.active {
+        display: block;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul{
+        width: 100%;
+        background-color: var(--mainColor);
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li {
+        display: block;
+        margin: 0;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
+        display: block;
+        background-color: var(--btnAndInputBackground);
+        color: var(--btnAndInputTextColor);
+        font-family: var(--font-default);
+        border-radius: 0px;
+        padding: 0px;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
+        background-color: var(--btnAndInputBackgroundhover);
+        transform: translateY(0px);
+    }
+
+    .footer img{
+        width: 35%;
+    }
+}
+

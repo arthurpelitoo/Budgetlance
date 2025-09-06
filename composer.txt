@@ -1,16 +1,36 @@
 pro inicio de estruturação do projeto:
 
-composer.json (autoload)
+composer.json
+(autoload) e (phpdotenv)
 
 No composer.json, você mapeia sua pasta src (ou outra raiz de código):
 
 {
   "autoload": {
     "psr-4": {
-      "App\\": "src/"
+      "Budgetlance\\": "./"
     }
+  },
+    "require": {
+    "vlucas/phpdotenv": "^5.6"
   }
 }
+
+Criar o arquivo .env na raiz do projeto
+
+Na raiz do projeto (onde fica o composer.json) criar o arquivo chamado .env
+
+e depois criar um script PHP simples para carregar esse .env (ex: loadenv.php)
+porque o php puro nao consegue ler o .env individualmente
+
+Depois no index.php dentro da pasta public, basta chamar:
+
+<?php
+require __DIR__ . "/../vendor/autoload.php";
+require __DIR__ . "/../loadenv.php";
+loadEnv(__DIR__ . "/../.env");
+require __DIR__ . "/../Config/config.php";
+require __DIR__ . "/../Router/rotas.php";
 
 
 Depois roda:

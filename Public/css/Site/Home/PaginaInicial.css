@@ -19,7 +19,7 @@
     position: absolute;
     flex-direction: column;
     text-align: left;
-    background-color: var(--mainColor);
+    background-color: var(--elementColor);
     justify-content: space-between;
     width: 780px;
     height: 200px;
@@ -41,8 +41,8 @@
 }
 
 .btn{
-    background-color: var(--btnAndInputBackground);
-    color: var(--btnAndInputTextColor);
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
     font-family: var(--font-default);
     font-size: 14px;
     text-decoration: none;
@@ -53,7 +53,7 @@
 }
 
 .btn:hover{
-    background-color: var(--btnAndInputBackgroundhover);
+    background-color: var(--btnBackgroundCtaHoverColor);
 }
 
 @media(min-width:2560px){

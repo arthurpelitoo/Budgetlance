@@ -1,6 +1,6 @@
 <?php
 
-namespace Budgetlance\Controller\Auth;
+namespace Budgetlance\Controller\Usuario;
 /**
  * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
  */
@@ -10,7 +10,7 @@ use Budgetlance\Controller\Controller;
 use Budgetlance\Dao\Site\Usuario\DaoUsuario;
 use Budgetlance\Model\Site\Usuario\ModelUsuario;
 
-class ControllerAuth extends Controller
+class ControllerUsuario extends Controller
 {
 
     /**
@@ -228,4 +228,33 @@ class ControllerAuth extends Controller
                         exit;
                     }
                 }    
+        /**
+         * FAZER LOGOUT:
+         */     
+                /**
+                 * metodo de rota para fazer logout
+                 */
+                public function logoutUsuario()
+                {
+                    //limpa a sessão
+                    $this->limparSessão();
+
+                    //destrói a sessão
+                    $this->destruirSessão();
+
+                    header("Location: /home");
+                    exit;
+                }
+
+                private function limparSessão()
+                {
+                    // Limpa todas as variáveis de sessão
+                    $_SESSION = [];
+                }
+
+                private function destruirSessão()
+                {
+                    session_destroy();
+                }
+                
 }

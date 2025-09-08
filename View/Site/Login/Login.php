@@ -42,7 +42,7 @@
 
             <button type="submit" class="btn_form">Fazer login</button>
 
-            <a href="/signUp">Deseja criar conta?</a>
+            <a class="link" href="/signUp">Deseja criar conta?</a>
 
         </form>
     </div>

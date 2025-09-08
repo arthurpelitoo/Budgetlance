@@ -3,22 +3,26 @@
 
 :root {
     --mainColor: #1F4E79;
-    --mainColorHover: #366087;
     --textMainColor: #FFFFFF;
+
+    --elementColor: #003669;
 
     --secondColor: #F5F5F5;
     --textSecondColor: #000000;
 
     --CTAColor: #ffe868;
     --CTAHoverColor: #ddc539;
+    --CTATextColor: #000000;
+    --btnAndInputCTATextColor: #000000;
 
-    --btnAndInputTextColor: #000000;
-    --btnAndInputTextColorHover: #FFFFFF;
+    --btnAndInputTextColor: #FFFFFF;
+    --btnAndInputTextColorHover: #000000;
 
     --textColor: #F5F5F5;
+    --textColorHover: #000000;
 
-    --btnAndInputBackground: #F5F5F5;
-    --btnAndInputBackgroundhover: rgba(255, 255, 255, 0.61);
+    /* --btnAndInputBackground: #F5F5F5; */
+    --btnAndInputBackgroundhover: #F5F5F5;
     --btnBackgroundCtaColor: #FFE868;
     --btnBackgroundCtaHoverColor: #DDC539;
     --font-title: "Bebas Neue", sans-serif, arial;
@@ -162,7 +166,7 @@ html, body {
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
     display: block;
-    background-color: var(--btnAndInputBackground);
+    /* background-color: var(--btnAndInputBackground); */
     color: var(--btnAndInputTextColor);
     font-family: var(--font-default);
     font-size: 14px;
@@ -174,7 +178,87 @@ html, body {
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
     background-color: var(--btnAndInputBackgroundhover);
+    color: var(--btnAndInputTextColorHover);
     transform: translateY(-2px);
+}
+
+/* O container principal do dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* O link que ativa o dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+    font-family: var(--font-default);
+    font-size: 14px;
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    padding: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: ease-in-out 0.3s;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.user-menu:hover {
+    background-color: var(--btnBackgroundCtaHoverColor) !important;
+}
+
+/* O ícone de seta para baixo */
+.dropdown-arrow {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+/* O menu que será exibido */
+.dropdown-menu {
+    display: none; /* Esconde o menu por padrão */
+    position: absolute;
+    right: 0; /* Alinha o menu com o lado direito do link */
+    background-color: var(--btnBackgroundCtaColor);
+    width: fit-content;
+    z-index: 10;
+    list-style-type: none;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Links dentro do menu */
+.dropdown-menu li a {
+    color: var(--btnAndInputCTATextColor);
+    background-color: var(--btnAndInputBackground);
+    padding: 8px;
+    text-decoration: none;
+    font-family: var(--font-default);
+    font-size: 14px;
+    display: block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.dropdown-menu li #lastBtn {
+    border-radius: 0 0 5px 5px;
+}
+
+/* Easter egg gigatonico do GTA SA: Mostra o menu quando o mouse clica no contêiner */
+.dropdown-container.active .dropdown-menu {
+    display: block;
+}
+
+/* Rotação da seta quando o menu está visível */
+.dropdown-container.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-container.active .user-menu{
+    border-radius: 5px 5px 0 0 !important;
 }
 
 main{
@@ -246,7 +330,111 @@ main{
     margin: auto;
 }
 
+/* Personalização do Modal */
+.modal-container{
+    position: relative;
+    z-index: 6;
+}
+
+.modal-container .modal{
+    background-color: var(--mainColor);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25vw;
+    height: auto;
+    border-radius: 10px;
+}
+  
+.modal-container .modal .modalContainerTitle{
+    width: 100%;
+    padding: 25px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: var(--CTAColor);
+}
+
+.modal-container .modal .modalContainerTitle .modalTitle{
+    font: 24px var(--font-default);
+    color: var(--CTATextColor) !important;
+}
+
+.modal-container .modal .modalContainerMessage{
+    width: 100%;
+    padding: 25px;
+}
+
+.modal-container .modal .modalContainerMessage .modalMessage{
+    font: 24px var(--font-default);
+    color: var(--textColor) !important;
+}
+        
+.modal-container .modal .modalButton{
+    width: 100%;
+    padding: 25px;
+    border-radius: 0px 0px 10px 10px;
+    background-color: var(--mainColor);
+}
+
+.modal-container .modal .modalButton button{
+    padding: 10px;
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font: 18px var(--font-default);
+    transition: ease-in-out 0.3s;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+            
+.modal-container .modal .modalButton button:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.modal-container .modal .modalDualButton{
+    display: flex;
+    width: 100%;
+    padding: 25px;
+    border-radius: 0px 0px 10px 10px;
+    background-color: var(--mainColor);
+    justify-content: space-evenly;
+}
+
+.modal-container .modal .modalDualButton button{
+    padding: 10px;
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font: 18px var(--font-default);
+    transition: ease-in-out 0.3s;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+            
+.modal-container .modal .modalDualButton button:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
 @media(max-width:1000px){
+
+    /* Responsivo */
 
     .header .container{
         width: 90%;
@@ -275,11 +463,18 @@ main{
         top: 2.25px;
         font-size: 20px;
         color: var(--textColor);
-        transition: ease-in-out 0.3s;
     }
 
     .header .container .flex .flex-col2 .header-menu:hover {
         color: var(--accentHoverColor);
+    }
+
+    #fa-bars{
+        transition: transform ease 0.3s;
+    }
+
+    #fa-bars.active{
+        transform: rotate(90deg);
     }
 
     .header .container .flex .flex-col2 .header-nav {
@@ -309,20 +504,52 @@ main{
 
     .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
         display: block;
-        background-color: var(--btnAndInputBackground);
-        color: var(--btnAndInputTextColor);
-        font-family: var(--font-default);
         border-radius: 0px;
         padding: 0px;
     }
 
     .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
-        background-color: var(--btnAndInputBackgroundhover);
         transform: translateY(0px);
     }
 
+    /* O container principal do dropdown */
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
+        width: 100%;
+        border-radius: 0px;
+        padding: 0px;
+    }
+
+    /* O link que ativa o dropdown */
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+        width: 100%;
+        border-radius: 0px;
+        padding: 0px;
+        justify-content: center;
+    }
+
+    /* O menu que será exibido */
+    .dropdown-menu {
+        display: none; /* Esconde o menu por padrão */
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+        z-index: 10;
+        list-style-type: none;
+        border-radius: 0;
+    }
+
+    .dropdown-menu li #lastBtn {
+        border-radius: 0;
+    }
+
+
     .footer img{
         width: 35%;
+    }
+
+    .modal-container .modal {
+        width: fit-content; /* só isso muda */
     }
 }
 

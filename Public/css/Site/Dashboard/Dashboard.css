@@ -1,0 +1,16 @@
+
+.contentBox{
+    background-color: var(--elementColor);
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+}
+
+/* Responsivo */
+@media(max-width:1000px){
+
+}

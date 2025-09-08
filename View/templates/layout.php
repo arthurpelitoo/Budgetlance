@@ -27,7 +27,7 @@
                 </div>
                 <div class="flex-col2">
                     <a href="javascript:showMenu()" class="header-menu" id="header-menu">
-                        <i class="fas fa-bars"></i>
+                        <i class="fas fa-bars" id="fa-bars"></i>
                     </a>
                     <nav class="header-nav" id="header-nav">
                         <ul class="nav-ul">
@@ -41,11 +41,7 @@
                                     Sobre
                                 </a>
                             </li>
-                            <li class="nav-li">
-                                <a href="/dashboard" class="nav-btn" title="Pagina Inicial">
-                                    Dashboard Gerenciador
-                                </a>
-                            </li>
+                            <?php if(!isset($_SESSION['usuario_nome'])): ?>
                             <li class="nav-li">
                                 <a href="/login" class="nav-btn" title="Fazer Login">
                                     Login
@@ -56,6 +52,49 @@
                                     Sign Up
                                 </a>
                             </li>
+                            <?php endif; ?>
+                            <?php if(isset($_SESSION['usuario_nome'])): ?>
+                            <li class="nav-li">
+                                <div class="dropdown-container">
+                                    <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
+                                        <?php
+                                            // Obtém a hora atual para definir a saudação
+                                            date_default_timezone_set("America/Sao_Paulo");
+                                            $hour = date('H');
+                                            $greeting = "Olá";
+
+                                            // Define a saudação com base na hora do dia
+                                            if ($hour >= 5 && $hour < 12) {
+                                                $greeting = "Bom dia";
+                                            } else if ($hour >= 12 && $hour < 18) {
+                                                $greeting = "Boa tarde";
+                                            } else {
+                                                $greeting = "Boa noite";
+                                            }
+                                            
+                                            $userName = isset($_SESSION["usuario_nome"]) ? htmlspecialchars($_SESSION["usuario_nome"]) : "Usuário";
+
+                                            // Exibe a saudação e o nome do usuário
+                                            echo $greeting . ", " . $userName . "!";
+                                        ?>
+                                        <span class="dropdown-arrow">&#9660</span> 
+                                        <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
+
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/perfil">Perfil</a>
+                                        </li>
+                                        <li>
+                                            <a href="/dashboard">Dashboard de Gerenciamento</a>
+                                        </li>
+                                        <li>
+                                            <a href="/login/logout" id="lastBtn">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <?php endif; ?>
                         </ul>
                     </nav>
                 </div>
@@ -72,6 +111,7 @@
                     <img src="<?= IMAGES_TEMPLATE_URL . "Budgetlancelogo.png" ?>" alt="logo Budgetlance">
                 </a>
             </p>
+            
             <p class="description">
                 © Budgetlance 2025
             </p>
@@ -82,11 +122,24 @@
     <script src="<?= $js ?>"></script>
     <?php endforeach; ?>
     <?php endif; ?>
+    <script src="<?= JS_TEMPLATE_URL . "layout.js" ?>"></script>
     <script>
+
+
         function showMenu() {
+            let bars = document.getElementById('fa-bars');
+            bars.classList.toggle("active");
+
             let menu = document.querySelector('.header-nav');
             menu.classList.toggle("active");
         }
+
+        function showDropdown() {
+            let dropdown = document.querySelector('.dropdown-container');
+            dropdown.classList.toggle("active");
+        }
+
+        
     </script>
 </body>
 </html>

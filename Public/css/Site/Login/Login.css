@@ -41,7 +41,7 @@
 .input_form{
     font-family: var(--font-default);
     color: var(--btnAndInputTextColor);
-    background-color: var(--btnAndInputBackground);
+    background-color: var(--elementColor);
     padding: 3px;
     margin: 5px;
     border: 5px solid var(--CTAColor);
@@ -50,7 +50,6 @@
 }
 
 .input_form:hover{
-    background-color: var(--btnAndInputBackgroundhover);
     border: 5px solid var(--CTAHoverColor);
 }
 
@@ -60,8 +59,8 @@
 }
 
 .btn_form{
-    background-color: var(--btnAndInputBackground);
-    color: var(--btnAndInputTextColor);
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
     font-family: var(--font-default);
     width: fit-content;
     margin-top: 20px;
@@ -75,93 +74,23 @@
 }
 
 .btn_form:hover{
-    background-color: var(--btnAndInputBackgroundhover);
+    background-color: var(--btnBackgroundCtaHoverColor);
 }
 
-
-/* Personalização do Modal */
-.modal-container{
-    position: relative;
-    z-index: 6;
-}
-
-.modal-container .modal{
-    background-color: var(--mainColor);
-    display: flex;
-    flex-direction: column;
+.link{
+    color: var(--CTAColor);
+    font-size: 14px;
+    font-family: var(--font-default);
+    margin-top: 20px;
     text-align: center;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    z-index: 6;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 25vw;
-    height: auto;
-    border-radius: 10px;
-}
-  
-.modal-container .modal .modalContainerTitle{
-    width: 100%;
-    padding: 25px;
-    border-radius: 10px 10px 0px 0px;
-    background-color: var(--mainColor);
 }
 
-.modal-container .modal .modalContainerTitle .modalTitle{
-    font: 24px var(--font-default);
-    color: var(--textColor) !important;
-}
-
-.modal-container .modal .modalContainerMessage{
-    width: 100%;
-    padding: 25px;
-}
-
-.modal-container .modal .modalContainerMessage .modalMessage{
-    font: 24px var(--font-default);
-    color: var(--textColor) !important;
-}
-        
-.modal-container .modal .modalButton{
-    width: 100%;
-    padding: 25px;
-    border-radius: 0px 0px 10px 10px;
-    background-color: var(--mainColor);
-}
-
-.modal-container .modal .modalButton button{
-    padding: 10px;
-    background-color: var(--btnAndInputBackground);
-    color: var(--btnAndInputTextColor);
-    font: 18px var(--font-default);
-    transition: ease-in-out 0.3s;
-    border: 0;
-    border-radius: 5px;
-    cursor: pointer;
-}
-            
-.modal-container .modal .modalButton button:hover{
-    background-color: var(--btnAndInputBackgroundhover);
-}
-
-.modal-overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    backdrop-filter: blur(5px);
+.link:hover{
+    color: var(--CTAHoverColor);
 }
 
 /* Responsivo */
 @media(max-width:1000px){
-    .modal-container .modal {
-        width: fit-content; /* só isso muda */
-    }
 
     .login_form{
         width: fit-content;

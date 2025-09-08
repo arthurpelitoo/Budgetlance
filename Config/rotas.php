@@ -1,7 +1,7 @@
 <?php
 
 use Budgetlance\Controller\Site\ControllerSite;
-use Budgetlance\Controller\Auth\ControllerAuth;
+use Budgetlance\Controller\Usuario\ControllerUsuario;
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 // serve para ler o que está na url depois da barra
@@ -24,15 +24,21 @@ switch($url)
     break;
 
     case "/login/form/verificar":
-        $authentication = new ControllerAuth();
+        $authentication = new ControllerUsuario();
         $authentication->loginUsuario();
+    break;
+
+    case "/login/logout":
+        $authentication = new ControllerUsuario();
+        $authentication->logoutUsuario();
+    break;
 
     case "/signUp":
         ControllerSite::signUp();
     break;
 
     case "/signup/form/salvar":
-        $authentication = new ControllerAuth();
+        $authentication = new ControllerUsuario();
         $authentication->salvarUsuario();
     break;
 

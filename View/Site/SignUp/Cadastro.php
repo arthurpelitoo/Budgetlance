@@ -51,7 +51,7 @@
 
             <button type="submit" class="btn_form">Confirmar cadastro</button>
 
-            <a href="/login">Já possui uma conta?</a>
+            <a class="link" href="/login">Já possui uma conta?</a>
 
         </form>
     </div>

@@ -47,7 +47,7 @@ switch($url)
     break;
 
     default:
-        http_response_code(404);
+        ControllerSite::erro404();
         echo "erro404";
     break;
 }

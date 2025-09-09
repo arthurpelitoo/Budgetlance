@@ -41,7 +41,7 @@
 .input_form{
     font-family: var(--font-default);
     color: var(--btnAndInputTextColor);
-    background-color: var(--elementColor);
+    background-color: var(--elementHardColor);
     padding: 3px;
     margin: 5px;
     border: 5px solid var(--CTAColor);
@@ -71,6 +71,7 @@
     align-self: center;
     cursor: pointer;
     transition: ease-in-out 0.3s;
+    animation: glowCTA 2s infinite ease-in-out;
 }
 
 .btn_form:hover{

@@ -36,11 +36,6 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="nav-li">
-                                <a href="/sobre" class="nav-btn" title="Sobre">
-                                    Sobre
-                                </a>
-                            </li>
                             <?php if(!isset($_SESSION['usuario_nome'])): ?>
                             <li class="nav-li">
                                 <a href="/login" class="nav-btn" title="Fazer Login">

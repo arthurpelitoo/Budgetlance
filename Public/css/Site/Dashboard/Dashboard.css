@@ -3,14 +3,398 @@
     background-color: var(--elementColor);
 }
 
+.background-image{
+    width: 100%;
+    /* background-image: url('/images/Site/Login/LoginBackground.jpg'); */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+.process-section{
+    display: flex;
+    flex-direction: row;
+}
+
 .grid-container{
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 24px;
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: repeat(2, auto) 1fr;
+}
+
+.grid-header{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column: 1 / -1;
+    gap: 120px;
+    align-items: center;
+    justify-items: center;
+}
+
+.header-title-column1{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    padding: 16px;
+    justify-self: start;
+}
+
+.header-link-column2{
+    font-family: var(--font-default);
+    font-size: 14px;
+    color: var(--CTAColor);
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    padding: 16px;
+    justify-self: end;
+    transition: ease-in-out 0.3s;
+}
+
+.header-link-column2:hover{
+    color: var(--CTAHoverColor);
+}
+
+.grid-container hr{
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+}
+
+.grid-section{
+    grid-column: 1 / -1;
+    grid-row: 3 / 4;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    /* Adiciona a barra de rolagem e define a altura máxima */
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.grid-section .card{
+    display: flex;
+    flex-direction: row;
+    margin: 8px;
+    padding: 16px;
+    background-color: var(--elementHardColor);
+}
+
+.section-content-column1{
+    margin-left: 10px;
+    flex-grow: 1;
+}
+
+.section-content-column1 .item-title{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+}
+
+.section-content-column1 .item-deadline{
+    font-family: var(--font-default);
+    font-size: 14px;
+    color: var(--textColor);
+}
+
+.section-content-column2{
+    align-self: center;
+    margin-right: 10px;
+}
+
+.section-content-column2 .item-price{
+    font-family: var(--font-default);
+    font-size: 14px;
+    color: var(--textColor);
+}
+
+/* Personalização da Scrollbar para navegadores WebKit (Chrome, Edge, Safari) NAO FUNCIONA NO FIREFOX */
+
+.grid-section::-webkit-scrollbar,
+.dashboard-budget-table::-webkit-scrollbar {
+    width: 8px; /* Largura da barra */
+}
+
+/* Fundo da barra de rolagem */
+.grid-section::-webkit-scrollbar-track,
+.dashboard-budget-table::-webkit-scrollbar-track {
+    background: var(--elementHardColor); /* Cor de fundo */
+}
+
+/* Barra de rolagem */
+.grid-section::-webkit-scrollbar-thumb,
+.dashboard-budget-table::-webkit-scrollbar-thumb {
+    background: var(--CTAColor); /* Cor da barra */
+    border-radius: 3px; /* Bordas arredondadas */
+    transition: ease-in-out 1s;
+}
+
+/* Quando o usuário passa o mouse */
+.grid-section::-webkit-scrollbar-thumb:hover,
+.dashboard-budget-table::-webkit-scrollbar-thumb:hover {
+    background: var(--CTAHoverColor); /* Cor ao passar o mouse */
+}
+
+/* muda a cor da barra no FIREFOX */
+.grid-section::scrollbar-color{
+    background: var(--CTAColor);
+}
+
+.control-panel-section{
+    margin: 24px;
+    max-width: 400px;
+}
+
+.control-panel{
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 16px;
     gap: 16px;
 }
 
+.control-panel-title{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+    text-align: center;
+}
+
+.control-panel ul{
+    width: 100%;
+    padding: 10px;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: var(--elementHardColor);
+}
+
+.control-panel ul li{
+    background-color: var(--btnBackgroundCtaColor);
+    width: 100%;
+    max-height: 150px;
+    list-style-type: none;
+    text-align: center;
+    animation: glowCTA 2s infinite ease-in-out;
+    transition: ease-in-out 0.3s;
+}
+
+.control-panel ul li:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.control-panel ul li a{
+    color: var(--btnAndInputCTATextColor);
+    display: block;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-default);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.dashboard-section{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
+.dashboard-container{
+    margin: 24px;
+    max-width: 900px;
+    border-radius: 5px;
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+}
+
+.dashboard-title{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+    text-align: left;
+}
+
+.dashboard-budget-table {
+    display: block;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 16px;
+    width: 100%;
+    background-color: var(--tableBackground1);
+    border-radius: 5px;
+    /* Adiciona a barra de rolagem e define a altura máxima */
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+    box-shadow: 0 0 20px var(--elementHardColorAlpha);
+}
+
+.dashboard-budget-table thead tr {
+    font-family: var(--font-default);
+    background-color: var(--elementHardColor);
+    color: var(--textColor);
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Remove a borda das células e ajusta o padding */
+.dashboard-budget-table th,
+.dashboard-budget-table td {
+    padding: 12px 15px;
+}
+
+.dashboard-budget-table td{
+    font-family: var(--font-default);
+}
+
+.dashboard-budget-table tbody tr {
+    border-bottom: 1px solid var(--tableLine);
+}
+
+.dashboard-budget-table tbody tr:nth-of-type(even) {
+    background-color: var(--tableBackground2);
+}
+
+.dashboard-budget-table tbody tr:last-of-type {
+    border-bottom: 2px solid var(--elementHardColor);
+}
+
+
 /* Responsivo */
 @media(max-width:1000px){
+
+    .process-section{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grid-container{
+        align-self: center;
+    }
+
+    .control-panel-section{
+        max-width: 600px;
+        align-self: center;
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 500px;
+        border-radius: 5px;
+    }
+}
+
+@media(max-width:500px){
+    .header-title-column1{
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    .header-link-column2{
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .grid-header{
+        gap: 20px;
+    }
+    .grid-section .card{
+        display: flex;
+        flex-direction: row;
+        margin: 4px;
+        padding: 8px;
+        background-color: var(--elementHardColor);
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 300px;
+        border-radius: 5px;
+    }
+}
+
+@media(max-width:325px){
+    .grid-container{
+        margin: 4px;
+    }
+
+    .header-title-column1{
+        font-size: 16px;
+        padding: 4px;
+    }
+
+    .header-link-column2{
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .grid-header{
+        gap: 10px;
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 240px;
+        border-radius: 5px;
+    }
+    
+}
+
+@media(max-width:240px){
+
+    .grid-header{
+        gap: 5px;
+    }
+
+    .header-title-column1{
+        font-size: 14px;
+        padding: 2px;
+    }
+
+    .header-link-column2{
+        font-size: 12px;
+        padding: 2px;
+    }
+
+    .grid-section .card{
+        display: flex;
+        flex-direction: row;
+        margin: 2px;
+        padding: 4px;
+        background-color: var(--elementHardColor);
+    }
+
+    .section-content-column1 .item-title{
+        font-size: 14px;
+    }
+
+    .section-content-column1 .item-deadline{
+        font-size: 10px;
+    }
+
+    .section-content-column2 .item-price{
+        font-size: 10px;
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 150px;
+        border-radius: 5px;
+    }
 
 }

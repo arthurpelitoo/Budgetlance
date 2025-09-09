@@ -9,6 +9,27 @@ use Budgetlance\Controller\Controller;
 
 class ControllerSite extends Controller
 {
+    public static function erro404()
+    {
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Erro/Erro404";
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            "title" => "Conheça a Budgetlance!",
+            "pageCss" => [
+                CSS_SITE_URL . "Erro/Erro404.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Erro/erro404.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Erro/Erro404.js"
+            ],
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+
+    }
 
     public static function home()
     {

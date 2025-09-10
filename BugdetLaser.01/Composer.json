@@ -1,0 +1,10 @@
+{
+  "name": "BudgetLancer",
+    "description": "Sistema de Orçamentos para clientes",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+} 

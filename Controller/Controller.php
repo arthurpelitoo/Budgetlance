@@ -26,4 +26,13 @@ abstract class Controller
          */
         require VIEW_TEMPLATES_PATH . "layout.php";
     }
+
+    protected static function isProtected()
+    {
+        if(!isset($_SESSION['usuario_id'])){
+            $_SESSION['errorTitle'] = "Você não está logado.";
+            $_SESSION['error'] = "Faça login para poder acessar esses recursos.";
+            header("Location: /login");
+        }
+    }
 }

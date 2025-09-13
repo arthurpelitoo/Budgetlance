@@ -2,29 +2,30 @@
 
 namespace Budgetlance\Dao\Site\Usuario;
 
-use Budgetlance\Dao\Dao;
+use Budgetlance\Dao\Connection;
+use Budgetlance\Hydrator\Usuario\HydratorUsuario;
 use Budgetlance\Model\Site\Usuario\ModelUsuario;
 
-class DaoUsuario extends Dao
+class DaoUsuario extends Connection
 {
     /**
      * Para criação de usuario:
      */
 
-        public function createUsuario(ModelUsuario $usuario)
+        public function createUsuario(ModelUsuario $usuario): ModelUsuario
         {
             try{
                 $sql = "INSERT INTO usuario (nm_usuario, email, senha) VALUES (:nm_usuario, :email, :senha) ";
                 // essa é uma string de comando.
 
                 //metodo de preparacao da string para inserção de dados.
-                $stmt = Dao::getConnection()->prepare($sql);
+                $stmt = Connection::getConnection()->prepare($sql);
                 $stmt->bindValue(":nm_usuario", $usuario->getNomeUsuario());
                 $stmt->bindValue(":email", $usuario->getEmailUsuario());
                 $stmt->bindValue(":senha", $usuario->getSenhaHash());
                 $stmt->execute();
 
-                $id = Dao::getConnection()->lastInsertId(); // <- aqui você pega o id do usuário recém-criado
+                $id = Connection::getConnection()->lastInsertId(); // <- aqui você pega o id do usuário recém-criado
                 $usuario->setIdUsuario($id);
 
                 return $usuario;
@@ -52,19 +53,9 @@ class DaoUsuario extends Dao
         public function buscarPorEmail(string $email)
         {
             try{
-                $sql =
-                    " SELECT                          " .
-                    "   U.ID AS id,                   " .
-                    "   U.NM_USUARIO AS nome,         " .
-                    "   U.EMAIL AS email,             " .
-                    "   U.SENHA AS senha,             " .
-                    "   U.TIPO_USUARIO AS tipo_usuario " .
-                    " FROM                            " .
-                    "   USUARIO U                     " .
-                    " WHERE                           " .
-                    "  U.EMAIL = :email               ";
+                $sql = "SELECT * FROM usuario WHERE email = :email";
             
-                $stmt = Dao::getConnection()->prepare($sql);
+                $stmt = Connection::getConnection()->prepare($sql);
                 $stmt->bindValue(":email", $email);
                 $stmt->execute();
 
@@ -77,13 +68,13 @@ class DaoUsuario extends Dao
                  * com o fetchAll() ele enviaria um array de array associativos,
                  * enviando varios registros, o que seria meio ruim pra esse caso, onde queremos apenas algo unico, que tem apenas um resultado e é performatico.
                  */
-                $data = $stmt->fetch();
+                $row = $stmt->fetch();
 
-                if($data){
+                if($row){
                     /**
-                     * ele vai retornar os dados da query do banco para a model
+                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelUsuario e retornar isso pra ModelUsuario.
                      */
-                    return ModelUsuario::fromDatabase($data);
+                    return HydratorUsuario::fromDatabase($row);
                 }else{
                     return null;
                 }
@@ -96,6 +87,50 @@ class DaoUsuario extends Dao
                 throw $e;
             }
             
+        }
+
+        public function updateUsuario(ModelUsuario $usuario):void
+        {
+            try{
+                $sql = 'UPDATE usuario SET nm_usuario = :nome, email = :email WHERE id = :id';
+
+                $stmt = Connection::getConnection()->prepare($sql);
+
+                $stmt->bindValue(":nome", $usuario->getNomeUsuario());
+                $stmt->bindValue(":email", $usuario->getEmailUsuario());
+                $stmt->bindValue(":id", $usuario->getIdUsuario());
+
+                $stmt->execute();
+
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+            
+        }
+
+        public function deleteUsuario(int $id): void
+        {
+            try{
+                $sql = "DELETE FROM usuario WHERE id = :id";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+
+                $stmt->bindValue(":id", $id);
+
+                $stmt->execute();
+            }catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de deleteUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de deleteUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            }
         }
 
 

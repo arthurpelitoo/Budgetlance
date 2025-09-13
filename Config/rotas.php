@@ -1,5 +1,6 @@
 <?php
 
+use Budgetlance\Controller\Cliente\ControllerCliente;
 use Budgetlance\Controller\Site\ControllerSite;
 use Budgetlance\Controller\Usuario\ControllerUsuario;
 
@@ -43,7 +44,25 @@ switch($url)
     break;
 
     case "/dashboard":
-        ControllerSite::dashboard();
+        ControllerSite::mainDashboard();
+    break;
+
+    case "/dashboard/cliente":
+        ControllerSite::clienteDashboard();
+    break;
+
+    case "/dashboard/cliente/form":
+        ControllerSite::clienteForm();
+    break;
+
+    case "/dashboard/cliente/form/salvar":
+        $authentication = new ControllerCliente();
+        $authentication->salvarCliente();
+    break;
+
+    case "/dashboard/cliente/deletar":
+        $authentication = new ControllerCliente();
+        $authentication->deletarCliente();
     break;
 
     default:
@@ -51,4 +70,31 @@ switch($url)
         echo "erro404";
     break;
 }
+
+// $routes = [
+//     "GET" => [
+//         "/" => [ControllerSite::class, "home"],
+//         "/signUp" => [ControllerSite::class, "signUp"],
+//         "/login" => [ControllerSite::class, "login"],
+//         "/login/logout" => [ControllerUsuario::class, "logoutUsuario"],
+//         "/dashboard" => [ControllerSite::class, "mainDashboard"],
+//         "/dashboard/cliente" => [ControllerSite::class, "clienteDashboard"],
+//         "/dashboard/cliente/form" => [ControllerSite::class, "clienteForm"],
+//     ],
+//     "POST" => [
+//         "/login/form/verificar" => [ControllerUsuario::class, "loginUsuario"],
+//         "/signUp/form/salvar" => [ControllerUsuario::class, "salvarUsuario"],
+//         "/dashboard/cliente/salvar" => [ControllerCliente::class, "salvarCliente"],
+//     ],
+// ];
+
+// $method = $_SERVER['REQUEST_METHOD'];
+// $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// if (isset($routes[$method][$url])) {
+//     [$controller, $action] = $routes[$method][$url];
+//     (new $controller())->$action();
+// } else {
+//     ControllerSite::erro404();
+// }
 ?>

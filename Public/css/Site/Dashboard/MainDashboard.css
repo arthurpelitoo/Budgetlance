@@ -3,12 +3,12 @@
     background-color: var(--elementColor);
 }
 
-.background-image{
+.pageContainer{
     width: 100%;
     /* background-image: url('/images/Site/Login/LoginBackground.jpg'); */
-    background-position: center;
+    /* background-position: center;
     background-size: cover;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
     height: 100%;
 }
 
@@ -260,6 +260,10 @@
 
 .dashboard-budget-table td{
     font-family: var(--font-default);
+}
+
+.dashboard-budget-table td a{
+    text-decoration: none;
 }
 
 .dashboard-budget-table tbody tr {

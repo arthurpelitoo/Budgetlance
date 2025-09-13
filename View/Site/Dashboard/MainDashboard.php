@@ -1,30 +1,5 @@
 <main>
-    <?php if(!isset($_SESSION['usuario_nome'])): ?>
-        <div id="modal-container" class="modal-container">
-            <div class="modal">
-                <div class="modalContainerTitle">
-                    <h3 class="modalTitle">
-                        Faça Login ou cadastre-se
-                    </h3>
-                </div>
-                <div class="modalContainerMessage">
-                    <p class="modalMessage">
-                        Faça Login ou cadastre-se para acessar o Dashboard Gerenciador.
-                    </p>
-                </div>
-                <div class="modalDualButton">
-                    <button onclick="enviarParaOLogin()">
-                        Fazer Login
-                    </button>
-                    <button onclick="enviarParaOSignUp()">
-                        Se Cadastrar
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div id="modal-overlay" class="modal-overlay"></div>
-    <?php endif; ?>
-    <section class="background-image">
+    <section class="pageContainer">
         <section class="process-section container">
             <section class="grid-container contentBox">
                 <header class="grid-header">
@@ -85,7 +60,7 @@
                     <h2 class="control-panel-title">Painel de Controle</h2>
                     <ul>
                         <li>
-                            <a class="control-panel-btn" href="">Adicionar e gerenciar clientes</a>
+                            <a class="control-panel-btn" href="/dashboard/cliente">Adicionar e gerenciar clientes</a>
                         </li>
                         <li>
                             <a class="control-panel-btn" href="">Adicionar e gerenciar categorias de serviços</a>
@@ -106,7 +81,6 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Serv. Nº</th>
                                     <th>Cliente</th>
                                     <th>Categ. Serviço</th>
                                     <th>Nome Serviço</th>
@@ -120,7 +94,6 @@
                             <tbody>
                                 <tr>
                                     <td><a href="">X</a></td>
-                                    <td>adsdadsadsa</td>
                                     <td>sadasdad</td>
                                     <td>aasdsad</td>
                                     <td>adsasdad</td>
@@ -132,7 +105,6 @@
                                 </tr>
                                 <tr>
                                     <td><a href="">X</a></td>
-                                    <td>adsdadsadsa</td>
                                     <td>sadasdad</td>
                                     <td>aasdsad</td>
                                     <td>adsasdad</td>
@@ -144,7 +116,6 @@
                                 </tr>
                                 <tr>
                                     <td><a href="">X</a></td>
-                                    <td>adsdadsadsa</td>
                                     <td>sadasdad</td>
                                     <td>aasdsad</td>
                                     <td>adsasdad</td>
@@ -156,7 +127,6 @@
                                 </tr>
                                 <tr>
                                     <td><a href="">X</a></td>
-                                    <td>adsdadsadsa</td>
                                     <td>sadasdad</td>
                                     <td>aasdsad</td>
                                     <td>adsasdad</td>

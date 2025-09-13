@@ -5,6 +5,7 @@ namespace Budgetlance\Controller\Site;
  * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
  */
 
+use Budgetlance\Controller\Cliente\ControllerCliente;
 use Budgetlance\Controller\Controller;
 
 class ControllerSite extends Controller
@@ -96,22 +97,87 @@ class ControllerSite extends Controller
         parent::renderSiteView($viewFile, $configGeralDaPagina);
     }
 
-    public static function dashboard()
+    public static function mainDashboard()
     {
+        //pergunta se o cara está logado, se não estiver, joga pra login.
+        parent::isProtected();
         // nome da pasta/arquivo.php View para ser passado.
-        $viewFile = "Dashboard/Dashboard";
+        $viewFile = "Dashboard/MainDashboard";
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
             "title" => "Dashboard de gerenciamento geral",
             "pageCss" => [
-                CSS_SITE_URL . "Dashboard/Dashboard.css"
+                CSS_SITE_URL . "Dashboard/MainDashboard.css"
             ],
             "pageImages" => [
-                IMAGES_SITE_URL . "Dashboard/DashboardBackground.jpg"
+                IMAGES_SITE_URL . "Dashboard/MainDashboardBackground.jpg"
             ],
             "pageJs" => [
-                JS_SITE_URL . "Dashboard/Dashboard.js"
+                JS_SITE_URL . "Dashboard/MainDashboard.js"
             ],
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function clienteDashboard()
+    {
+        parent::isProtected();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Dashboard/ClienteDashboard";
+        $controllerCliente = new ControllerCliente();
+        $clientes = $controllerCliente->listarClientes();
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            "title" => "Dashboard de Cliente",
+            "pageCss" => [
+                CSS_SITE_URL . "Dashboard/ClienteDashboard.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Dashboard/ClienteDashboardBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Dashboard/ClienteDashboard.js"
+            ],
+            "clientes" => $clientes,
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function clienteForm()
+    {
+        parent::isProtected();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Formularios/ClienteForm";
+
+        //(pra funcao UPDATE).
+        if(isset($_GET['id']))
+        {
+            $controllerCliente = new ControllerCliente();
+            // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
+            $cliente = $controllerCliente->pegarPeloId((int) $_GET['id']); // O (int) evita sqlInjection, sendo um type cast explícito. Ele converte o valor recebido (nesse caso, uma string que veio da URL) para o tipo inteiro.
+            
+        }else{
+            $cliente = null;
+        }
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            
+            "title" => "Formulario de Cliente",
+            "pageCss" => [
+                CSS_SITE_URL . "Formularios/ClienteForm.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Formularios/ClienteFormBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Formularios/ClienteForm.js"
+            ],
+
+            "cliente" => $cliente,
         ];
 
         parent::renderSiteView($viewFile, $configGeralDaPagina);

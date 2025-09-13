@@ -7,7 +7,7 @@ class ModelUsuario
     private int $id; 
     private string $nm_usuario, $email, $senha, $tipo_usuario = "usuario";
 
-    private function __construct(string $nm_usuario, string $email, string $senha, bool $hashed = false)
+    public function __construct(string $nm_usuario, string $email, string $senha, bool $hashed = false)
     {
         $this->nm_usuario = $nm_usuario;
         $this->email = $email;
@@ -114,45 +114,7 @@ class ModelUsuario
             }
 
 
-    /**
-     * Recria o usuario com base com o que o banco mandou:
-     */
-            /**
-             * Reconstroi o usuario por meio dos dados entregados pelo banco em forma de array,
-             * mas geralmente se devolve para poder entregar uma resposta em outra camada
-             * ex: (na ControllerAuth lá na parte de login).
-             */
-            public static function fromDatabase(array $data):self
-            {
-                /**
-                 * atenção:
-                 * 
-                 * ele vai fazer o seguinte, pegar os dados da query do banco e remontar aqui,
-                 * o pulo do gato é que o apelido pra cada coluna na query da DaoUsuario segue aqui
-                 * ou seja,
-                 * ex:
-                 * "   U.NM_USUARIO AS nome,         " .
-                 * ao inves de pegar com $data['U.NM_USUARIO'], você pega com o apelido que é 'nome'.
-                 * 
-                 * true aqui serve para falar que a senha já está hasheada, aí na hora de se instanciar ele não faz hash novamente.
-                 */
-                $usuario = new self($data['nome'], $data['email'], $data['senha'], true);
-
-                /**
-                 * serve para linkar o id do usuario com o id da classe e terem o mesmo valor.
-                 */
-                $usuario->id = $data['id'];
-
-                /**
-                 * serve para linkar o tipo do usuario com o tipo do usuario da classe e terem o mesmo valor.
-                 */
-                $usuario->tipo_usuario = $data['tipo_usuario'];
-
-                /**
-                 * retorna a instancia para a controllerAuth fazer a verificação com validarSenha()[dessa model] lá na controller.
-                 */
-                return $usuario;
-            }
+    
 
     /**
      * Validação:

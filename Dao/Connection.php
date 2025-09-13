@@ -6,7 +6,7 @@ use \PDO;
 use \PDOException;
 use \RuntimeException;
 
-abstract class Dao
+abstract class Connection
 //Data Access Object
 {
 

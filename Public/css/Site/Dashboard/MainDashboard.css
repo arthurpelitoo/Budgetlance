@@ -5,11 +5,11 @@
 
 .pageContainer{
     width: 100%;
-    /* background-image: url('/images/Site/Login/LoginBackground.jpg'); */
-    /* background-position: center;
+    background-image: url('/images/Site/Dashboard/MainDashboardBackground.avif');
+    background-position: center;
     background-size: cover;
-    background-repeat: no-repeat; */
-    height: 100%;
+    background-repeat: no-repeat;
+    height: 900px;
 }
 
 .process-section{
@@ -116,28 +116,24 @@
 
 /* Personalização da Scrollbar para navegadores WebKit (Chrome, Edge, Safari) NAO FUNCIONA NO FIREFOX */
 
-.grid-section::-webkit-scrollbar,
-.dashboard-budget-table::-webkit-scrollbar {
+.grid-section::-webkit-scrollbar {
     width: 8px; /* Largura da barra */
 }
 
 /* Fundo da barra de rolagem */
-.grid-section::-webkit-scrollbar-track,
-.dashboard-budget-table::-webkit-scrollbar-track {
+.grid-section::-webkit-scrollbar-track {
     background: var(--elementHardColor); /* Cor de fundo */
 }
 
 /* Barra de rolagem */
-.grid-section::-webkit-scrollbar-thumb,
-.dashboard-budget-table::-webkit-scrollbar-thumb {
+.grid-section::-webkit-scrollbar-thumb {
     background: var(--CTAColor); /* Cor da barra */
     border-radius: 3px; /* Bordas arredondadas */
     transition: ease-in-out 1s;
 }
 
 /* Quando o usuário passa o mouse */
-.grid-section::-webkit-scrollbar-thumb:hover,
-.dashboard-budget-table::-webkit-scrollbar-thumb:hover {
+.grid-section::-webkit-scrollbar-thumb:hover {
     background: var(--CTAHoverColor); /* Cor ao passar o mouse */
 }
 
@@ -230,7 +226,7 @@
 }
 
 .dashboard-budget-table {
-    display: block;
+    display: inline-block;
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 16px;
@@ -278,9 +274,34 @@
     border-bottom: 2px solid var(--elementHardColor);
 }
 
+.dashboard-budget-table tbody tr td .btn_delete{
+    color: var(--tableDelete);
+    cursor: pointer;
+}
+
+.btn-add{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.3s;
+    width: fit-content;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn-add:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
 
 /* Responsivo */
 @media(max-width:1000px){
+
+    .pageContainer{
+        height: 100%;
+    }
 
     .process-section{
         display: flex;

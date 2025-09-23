@@ -1,0 +1,179 @@
+
+.contentBox{
+    background-color: var(--elementColor);
+}
+
+.pageContainer{
+    width: 100%;
+    background-image: url('/images/Site/Dashboard/CategoriaServicoDashboardBackground.avif');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 800px;
+    align-content: space-evenly;
+}
+
+.btn-add{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.3s;
+    width: fit-content;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn-add:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.dashboard-section{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
+.dashboard-container{
+    margin: 24px;
+    max-width: 900px;
+    border-radius: 10px 5px 5px 5px;
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+}
+
+.dashboard-title{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+    text-align: left;
+}
+
+.dashboard-budget-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 16px;
+    width: 100%;
+    background-color: var(--tableBackground1);
+    border-radius: 5px;
+    /* Adiciona a barra de rolagem e define a altura máxima */
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+    box-shadow: 0 0 20px var(--elementHardColorAlpha);
+}
+
+.dashboard-budget-table thead tr {
+    font-family: var(--font-default);
+    background-color: var(--elementHardColor);
+    color: var(--textColor);
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Remove a borda das células e ajusta o padding */
+.dashboard-budget-table th,
+.dashboard-budget-table td {
+    padding: 12px 15px;
+}
+
+.dashboard-budget-table td{
+    font-family: var(--font-default);
+}
+
+.dashboard-budget-table td a{
+    text-decoration: none;
+}
+
+.dashboard-budget-table tbody tr {
+    border-bottom: 1px solid var(--tableLine);
+}
+
+.dashboard-budget-table tbody tr:nth-of-type(even) {
+    background-color: var(--tableBackground2);
+}
+
+.dashboard-budget-table tbody tr:last-of-type {
+    border-bottom: 2px solid var(--elementHardColor);
+}
+
+.dashboard-budget-table tbody tr td .btn_delete{
+    color: var(--tableDelete);
+    cursor: pointer;
+}
+
+.nav-button {
+    /* Remove a decoração de link padrão */
+    text-decoration: none; 
+    /* Define a cor de fundo e do texto */
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    /* Adiciona um preenchimento para parecer um botão */
+    padding: 12px 30px;
+    border-radius: 5px 0 5px 0;
+    font-weight: 800;
+    cursor: pointer;
+    /* Transição para um efeito suave ao passar o mouse */
+    transition: background-color 0.2s ease;
+    /* Centraliza o conteúdo (o ícone) */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre o ícone e o texto, se houver */
+}
+
+.nav-button:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+
+/* Responsivo */
+@media(max-width:1000px){
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 500px;
+        border-radius: 5px;
+    }
+}
+
+@media(max-width:500px){
+
+    .dashboard-budget-table{
+        display: block;
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 300px;
+        border-radius: 5px;
+    }
+}
+
+@media(max-width:325px){
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 240px;
+        border-radius: 5px;
+    }
+    
+}
+
+@media(max-width:240px){
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 190px;
+        border-radius: 5px;
+    }
+
+}

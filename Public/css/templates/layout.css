@@ -13,6 +13,7 @@
     --textSecondColor: #000000;
 
     --tableLine: #dddddddd;
+    --tableDelete: #730000;
     --tableBackground1: #FFFFFF;
     --tableBackground2: #f3f3f3;
 
@@ -27,8 +28,7 @@
     --textColor: #F5F5F5;
     --textColorHover: #000000;
 
-    /* --btnAndInputBackground: #F5F5F5; */
-    --btnAndInputBackgroundhover: #F5F5F5;
+    --btnAndInputBackgroundhover: #d7d7d7;
     --btnBackgroundCtaColor: #FFE868;
     --btnBackgroundCtaHoverColor: #DDC539;
     --font-title: "Bebas Neue", sans-serif, arial;
@@ -51,6 +51,11 @@
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.1); opacity: 0.8; }
     100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 
@@ -442,6 +447,37 @@ main{
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5;
     backdrop-filter: blur(5px);
+}
+
+.dashboard-budget-table::-webkit-scrollbar,
+::-webkit-scrollbar {
+    width: 8px; /* Largura da barra */
+}
+
+/* Fundo da barra de rolagem */
+.dashboard-budget-table::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+    background: var(--elementHardColor); /* Cor de fundo */
+}
+
+/* Barra de rolagem */
+.dashboard-budget-table::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+    background: var(--CTAColor); /* Cor da barra */
+    border-radius: 3px; /* Bordas arredondadas */
+    transition: ease-in-out 1s;
+}
+
+/* Quando o usuário passa o mouse */
+.dashboard-budget-table::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+    background: var(--CTAHoverColor); /* Cor ao passar o mouse */
+}
+
+/* muda a cor da barra no FIREFOX */
+.dashboard-budget-table::scrollbar-color,
+::scrollbar-color{
+    background: var(--CTAColor);
 }
 
 @media(max-width:1000px){

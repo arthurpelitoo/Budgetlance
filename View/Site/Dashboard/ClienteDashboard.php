@@ -1,3 +1,4 @@
+
 <main>
     <?php if(isset($_SESSION['error'])): ?>
         <div id="modal-container" class="modal-container">
@@ -41,12 +42,28 @@
     <section class="pageContainer">
         <section class="dashboard-section">
             <section class="dashboard-container contentBox">
+                <a href="/dashboard" class="nav-button" aria-label="Anterior">
+                    «
+                </a>
                 <div class="dashboard">
                     <h2 class="dashboard-title">Dashboard de Clientes</h2>
 
                     <h3 class="dashboard-title">Crie um cliente, liste clientes, edite clientes ou exclua clientes.</h3>
 
                     <?php if(!empty($clientes)): ?>
+
+                    <form method="get" action="/dashboard/cliente">
+                        <input type="text" name="query" placeholder="Pesquisar..." >
+
+                        <select name="filtro">
+                            <option value="nome">Nome</option>
+                            <option value="email">Email</option>
+                            <option value="telefone">Telefone</option>
+                        </select>
+
+                        <button type="submit">Buscar</button>
+                    </form>
+
                     <table class="dashboard-budget-table">
                             <thead>
                                 <tr>
@@ -60,7 +77,7 @@
                             <tbody>
                                 <?php foreach($clientes as $cliente): ?>
                                 <tr>
-                                    <td><a onclick="confirmarExclusao(<?= $cliente->getIdCliente() ?>)">X</a></td>
+                                    <td><a class="btn_delete" onclick="confirmarExclusao(<?= $cliente->getIdCliente() ?>)">X</a></td>
                                     <td><?= htmlspecialchars($cliente->getNomeCliente()) ?></td>
                                     <td><?= htmlspecialchars($cliente->getTelefoneCliente()) ?></td>
                                     <td><?= htmlspecialchars($cliente->getEmailCliente()) ?></td>
@@ -75,7 +92,7 @@
                     </a>
                     <?php else: ?> 
                             <h3 class="dashboard-title">Nenhum registro foi encontrado.</h3>
-                            <a href="/dashboard/cliente/form">
+                            <a class="btn-add" href="/dashboard/cliente/form">
                                 Cadastrar Cliente
                             </a>
                     <?php endif ?>

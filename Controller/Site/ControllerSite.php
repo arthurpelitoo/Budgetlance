@@ -5,10 +5,14 @@ namespace Budgetlance\Controller\Site;
  * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
  */
 
+use Budgetlance\Controller\Categoria_Servico\ControllerCServico;
 use Budgetlance\Controller\Cliente\ControllerCliente;
 use Budgetlance\Controller\Controller;
+use Budgetlance\Controller\Orcamento\ControllerOrcamento;
+use Budgetlance\Dao\Site\Categoria_Servico\DaoCServico;
+use Budgetlance\Dao\Site\Cliente\DaoCliente;
 
-class ControllerSite extends Controller
+final class ControllerSite extends Controller
 {
     public static function erro404()
     {
@@ -21,7 +25,7 @@ class ControllerSite extends Controller
                 CSS_SITE_URL . "Erro/Erro404.css"
             ],
             "pageImages" => [
-                IMAGES_SITE_URL . "Erro/erro404.jpg"
+                IMAGES_SITE_URL . "Erro/erro404.png"
             ],
             "pageJs" => [
                 JS_SITE_URL . "Erro/Erro404.js"
@@ -101,8 +105,12 @@ class ControllerSite extends Controller
     {
         //pergunta se o cara está logado, se não estiver, joga pra login.
         parent::isProtected();
+
         // nome da pasta/arquivo.php View para ser passado.
         $viewFile = "Dashboard/MainDashboard";
+        $controllerOrcamento = new ControllerOrcamento();
+        $orcamentos = $controllerOrcamento->listarOrcamentos();
+
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
             "title" => "Dashboard de gerenciamento geral",
@@ -115,6 +123,7 @@ class ControllerSite extends Controller
             "pageJs" => [
                 JS_SITE_URL . "Dashboard/MainDashboard.js"
             ],
+            "orcamentos" => $orcamentos,
         ];
 
         parent::renderSiteView($viewFile, $configGeralDaPagina);
@@ -127,6 +136,8 @@ class ControllerSite extends Controller
         $viewFile = "Dashboard/ClienteDashboard";
         $controllerCliente = new ControllerCliente();
         $clientes = $controllerCliente->listarClientes();
+
+        
 
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
@@ -159,6 +170,15 @@ class ControllerSite extends Controller
             // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
             $cliente = $controllerCliente->pegarPeloId((int) $_GET['id']); // O (int) evita sqlInjection, sendo um type cast explícito. Ele converte o valor recebido (nesse caso, uma string que veio da URL) para o tipo inteiro.
             
+            /**
+             * se ele ver que não procede, entrega erro
+             */
+            if (!$cliente) {
+                $_SESSION['errorTitle'] = "Erro no Cliente!";
+                $_SESSION['error'] = "Nenhum cliente selecionado.";
+                header("Location: /dashboard/cliente");
+                exit;
+            }
         }else{
             $cliente = null;
         }
@@ -178,6 +198,156 @@ class ControllerSite extends Controller
             ],
 
             "cliente" => $cliente,
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function servicoDashboard()
+    {
+        parent::isProtected();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Dashboard/CServicoDashboard";
+        $controllerCServico = new ControllerCServico();
+        $cservicos = $controllerCServico->listarCategoriaServicos();
+
+        
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            "title" => "Dashboard de Serviço",
+            "pageCss" => [
+                CSS_SITE_URL . "Dashboard/CServicoDashboard.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Dashboard/CServicoDashboardBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Dashboard/CServicoDashboard.js"
+            ],
+            "cservicos" => $cservicos,
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function servicoForm()
+    {
+        parent::isProtected();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Formularios/CServicoForm";
+
+        //(pra funcao UPDATE).
+        if(isset($_GET['id']))
+        {
+            $controllerCServico = new ControllerCServico();
+            // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
+            $cservico = $controllerCServico->pegarPeloId((int) $_GET['id']); // O (int) evita sqlInjection, sendo um type cast explícito. Ele converte o valor recebido (nesse caso, uma string que veio da URL) para o tipo inteiro.
+            
+            /**
+             * se ele ver que não procede, entrega erro
+             */
+            if (!$cservico) {
+                $_SESSION['errorTitle'] = "Erro na Categoria de Serviço!";
+                $_SESSION['error'] = "Nenhum serviço selecionado.";
+                header("Location: /dashboard/servico");
+                exit;
+            }
+        }else{
+            $cservico = null;
+        }
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            
+            "title" => "Formulario de Serviço",
+            "pageCss" => [
+                CSS_SITE_URL . "Formularios/CServicoForm.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Formularios/CServicoFormBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Formularios/CServicoForm.js"
+            ],
+
+            "cservico" => $cservico,
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function orcamentoDashboard()
+    {
+        // verifica se o usuario ja fez cadastro das outras tabelas.
+        parent::isCompleted();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Dashboard/OrcamentoDashboard";
+        $controllerOrcamento = new ControllerOrcamento();
+        $orcamentos = $controllerOrcamento->listarOrcamentos();
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            "title" => "Dashboard de Orçamento",
+            "pageCss" => [
+                CSS_SITE_URL . "Dashboard/OrcamentoDashboard.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Dashboard/OrcamentoDashboardBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Dashboard/OrcamentoDashboard.js"
+            ],
+            "orcamentos" => $orcamentos,
+        ];
+
+        parent::renderSiteView($viewFile, $configGeralDaPagina);
+    }
+
+    public static function orcamentoForm()
+    {
+        parent::isCompleted();
+        // nome da pasta/arquivo.php View para ser passado.
+        $viewFile = "Formularios/OrcamentoForm";
+
+        $controllerOrcamento = new ControllerOrcamento();
+        $clientes = $controllerOrcamento->pegarPeloCliente();
+        $categorias = $controllerOrcamento->pegarPelaCategoriaServico();
+        
+        //(pra funcao UPDATE).
+        if(isset($_GET['id']))
+        {
+            // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
+            $orcamento = $controllerOrcamento->pegarPeloId((int) $_GET['id']); // O (int) evita sqlInjection, sendo um type cast explícito. Ele converte o valor recebido (nesse caso, uma string que veio da URL) para o tipo inteiro.
+            
+            /**
+             * se ele ver que não procede, entrega erro
+             */
+            if (!$orcamento) {
+                $_SESSION['errorTitle'] = "Erro no Orçamento!";
+                $_SESSION['error'] = "Você não tem permissão para editar este orçamento.";
+                header("Location: /dashboard/orcamento");
+                exit;
+            }
+        }else{
+            $orcamento = null;
+        }
+
+        // configuracao geral para a pagina a ser gerada. 
+        $configGeralDaPagina = [
+            "title" => "Formulario de Orçamento",
+            "pageCss" => [
+                CSS_SITE_URL . "Formularios/OrcamentoForm.css"
+            ],
+            "pageImages" => [
+                IMAGES_SITE_URL . "Formularios/OrcamentoFormBackground.jpg"
+            ],
+            "pageJs" => [
+                JS_SITE_URL . "Formularios/OrcamentoForm.js"
+            ],
+            "clientes" => $clientes,
+            "categorias" => $categorias,
+            "orcamento" => $orcamento,
         ];
 
         parent::renderSiteView($viewFile, $configGeralDaPagina);

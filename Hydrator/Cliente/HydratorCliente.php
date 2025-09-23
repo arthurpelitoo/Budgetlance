@@ -4,7 +4,7 @@ namespace Budgetlance\Hydrator\Cliente;
 
 use Budgetlance\Model\Site\Cliente\ModelCliente;
 
-class HydratorCliente
+final class HydratorCliente
 {
     /**
      * Converte uma linha em um objeto Cliente

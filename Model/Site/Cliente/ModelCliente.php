@@ -2,13 +2,17 @@
 
 namespace Budgetlance\Model\Site\Cliente;
 
-use Budgetlance\Dao\Site\Cliente\DaoCliente;
-use Budgetlance\Model\Site\Orcamento\ModelOrcamento;
-use Budgetlance\Model\Site\Servico\ModelServico;
-
 class ModelCliente {
     private int $id, $id_usuario;
     private string $nm_cliente, $telefone, $email;
+
+    /**
+     * Construtor da classe ModelCliente
+     * @param int|null $id_usuario Id do usuario (pode ser null na criação)
+     * @param string $nm_cliente Nome do cliente
+     * @param string|null $telefone Telefone do cliente
+     * @param string|null $email Email do cliente
+     */
 
     public function __construct(?int $id_usuario, string $nm_cliente, ?string $telefone = null, ?string $email = null) 
     {
@@ -98,11 +102,6 @@ class ModelCliente {
                         }
             }
 
-            
-
-
-
-
     /**
      * GETTERS:
      */
@@ -136,7 +135,6 @@ class ModelCliente {
      * SETTERS:
      */
         public function setIdCliente(int $id) { $this->id = $id; }
-        private function setIdUsuario(int $id_usuario) { $this->id_usuario = $id_usuario; }
 
 }
 

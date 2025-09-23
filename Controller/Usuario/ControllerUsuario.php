@@ -5,12 +5,12 @@ namespace Budgetlance\Controller\Usuario;
  * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
  */
 
-use Budgetlance\Config\sanitizador;
+use Budgetlance\Config\Sanitizador;
 use Budgetlance\Controller\Controller;
 use Budgetlance\Dao\Site\Usuario\DaoUsuario;
 use Budgetlance\Model\Site\Usuario\ModelUsuario;
 
-class ControllerUsuario extends Controller
+final class ControllerUsuario extends Controller
 {
 
     /**
@@ -30,9 +30,9 @@ class ControllerUsuario extends Controller
                 $senha = $_POST['senha'] ?? '';
 
                 return [
-                    'nome' => sanitizador::sanitizar($nome),
-                    'email' => sanitizador::sanitizar($email),
-                    'senha' => sanitizador::sanitizar($senha),
+                    'nome' => Sanitizador::sanitizar($nome),
+                    'email' => Sanitizador::sanitizar($email),
+                    'senha' => Sanitizador::sanitizar($senha),
                 ];
             } catch(\Exception $e){
                 /**
@@ -90,11 +90,22 @@ class ControllerUsuario extends Controller
                     $dao->createUsuario($usuario);
 
                     /**
-                     * definimos a sessão de login do usuario para o site;
+                     * definimos a sessão de login do usuario para o site pegando o objeto ModelUsuario de volta
+                     * e colocando nessa variavel super global.
                      */
-                    $_SESSION['usuario_id'] = $usuario->getIdUsuario();
-                    $_SESSION['usuario_nome'] = $usuario->getNomeUsuario();
-                    $_SESSION['usuario_tipo'] = $usuario->getTipoUsuario();
+
+                    $_SESSION['logado'] = $usuario;
+                    
+
+                    //exemplo de como usar esse condenado!
+                    // if (isset($_SESSION['logado'])) {
+                    //     $usuario = $_SESSION['logado']; // pega o objeto ModelUsuario de volta
+
+                    //     echo $usuario->getIdUsuario();   // acessa o id
+                    //     echo $usuario->getNomeUsuario(); // acessa o nome
+                    //     echo $usuario->getEmailUsuario();// acessa o email
+                    // }
+                    // se o objeto crescer com os atributos, aí sim complicou, porque fica pesado, mas como o projeto é menor dá pra deixar passar.
 
                     /**
                      * manda o usuario para a dashboard.
@@ -178,9 +189,8 @@ class ControllerUsuario extends Controller
                          * definimos a sessão de login do usuario para o site;
                          */
                         if($usuario && $usuario->validarSenha($senha)){
-                            $_SESSION['usuario_id'] = $usuario->getIdUsuario();
-                            $_SESSION['usuario_nome'] = $usuario->getNomeUsuario();
-                            $_SESSION['usuario_tipo'] = $usuario->getTipoUsuario();
+                            
+                            $_SESSION['logado'] = $usuario;
 
                             /**
                              * manda o usuario para a dashboard.

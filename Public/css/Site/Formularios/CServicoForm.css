@@ -1,0 +1,150 @@
+.servico_div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 800px;
+    z-index: 1;
+    background-image: url('/images/Site/Formularios/CategoriaServicoFormBackground.avif');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.servico_title{
+    font: 32px var(--font-title);
+    text-align: center;
+    color: var(--textColor);
+    margin-bottom: 20px;
+}
+
+.servico_div_form{
+    background-color: var(--mainColor);
+    display: block;
+    justify-content: center;
+    align-self: center;
+    width: 500px;
+    border-radius: 10px 5px 5px 5px;
+}
+
+.servico_form{
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    padding: 25px;
+    border-radius: 5px;
+}
+
+.nav-button {
+    /* Remove a decoração de link padrão */
+    text-decoration: none; 
+    /* Define a cor de fundo e do texto */
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    /* Adiciona um preenchimento para parecer um botão */
+    padding: 12px 30px;
+    border-radius: 5px 0 5px 0;
+    font-weight: 800;
+    cursor: pointer;
+    /* Transição para um efeito suave ao passar o mouse */
+    transition: background-color 0.2s ease;
+    /* Centraliza o conteúdo (o ícone) */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre o ícone e o texto, se houver */
+}
+
+.nav-button:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.label_form{
+    font-family: var(--font-default);
+    font-size: 14px;
+    color: var(--textColor);
+}
+
+.input_form{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    margin-top: 5px;
+    border: 5px solid var(--CTAColor);
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+}
+
+.input_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.input_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.textarea_form{
+    resize: none;
+    min-width: 100%;
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    margin-top: 5px;
+    border: 5px solid var(--CTAColor);
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+}
+
+.textarea_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.textarea_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.btn_form{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    width: fit-content;
+    margin-top: 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 8px;
+    border: 0;
+    cursor: pointer;
+    align-self: center;
+    transition: ease-in-out 0.3s;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn_form:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.link{
+    color: var(--CTAColor);
+    font-size: 14px;
+    font-family: var(--font-default);
+    margin-top: 20px;
+    text-align: center;
+}
+
+.link:hover{
+    color: var(--CTAHoverColor);
+}
+
+/* Responsivo */
+@media(max-width:1000px){
+
+    .servico_div_form{
+        width: fit-content;
+        margin: 25px;
+    }
+}

@@ -4,9 +4,9 @@
     justify-content: center;
     position: relative;
     width: 100%;
-    height: 700px;
+    height: 800px;
     z-index: 1;
-    background-image: url('/images/Site/SignUp/SignUpBackground.jpg');
+    background-image: url('/images/Site/Formularios/ClienteFormBackground.avif');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -19,16 +19,45 @@
     margin-bottom: 20px;
 }
 
+.cliente_div_form{
+    background-color: var(--mainColor);
+    display: block;
+    justify-content: center;
+    align-self: center;
+    width: 500px;
+    border-radius: 10px 5px 5px 5px;
+}
+
 .cliente_form{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-self: center;
     z-index: 2;
-    padding: 50px;
-    width: 500px;
+    padding: 25px;
     border-radius: 5px;
-    background-color: var(--mainColor);
+}
+
+.nav-button {
+    /* Remove a decoração de link padrão */
+    text-decoration: none; 
+    /* Define a cor de fundo e do texto */
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    /* Adiciona um preenchimento para parecer um botão */
+    padding: 12px 30px;
+    border-radius: 5px 0 5px 0;
+    font-weight: 800;
+    cursor: pointer;
+    /* Transição para um efeito suave ao passar o mouse */
+    transition: background-color 0.2s ease;
+    /* Centraliza o conteúdo (o ícone) */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre o ícone e o texto, se houver */
+}
+
+.nav-button:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
 }
 
 .label_form{
@@ -42,7 +71,7 @@
     color: var(--btnAndInputTextColor);
     background-color: var(--elementHardColor);
     padding: 3px;
-    margin: 5px;
+    margin-top: 5px;
     border: 5px solid var(--CTAColor);
     border-radius: 5px;
     transition: ease-in-out 0.3s;
@@ -92,7 +121,8 @@
 /* Responsivo */
 @media(max-width:1000px){
 
-    .cliente_form{
+    .cliente_div_form{
         width: fit-content;
+        margin: 25px;
     }
 }

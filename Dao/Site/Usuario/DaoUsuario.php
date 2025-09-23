@@ -6,7 +6,7 @@ use Budgetlance\Dao\Connection;
 use Budgetlance\Hydrator\Usuario\HydratorUsuario;
 use Budgetlance\Model\Site\Usuario\ModelUsuario;
 
-class DaoUsuario extends Connection
+final class DaoUsuario extends Connection
 {
     /**
      * Para criação de usuario:
@@ -74,7 +74,7 @@ class DaoUsuario extends Connection
                     /**
                      * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelUsuario e retornar isso pra ModelUsuario.
                      */
-                    return HydratorUsuario::fromDatabase($row);
+                    return HydratorUsuario::fromRow($row);
                 }else{
                     return null;
                 }
@@ -84,6 +84,45 @@ class DaoUsuario extends Connection
                 throw $e;
             } catch(\Exception $e){
                 error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorEmail: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+            
+        }
+
+        public function buscarPeloId(int $id_usuario): ?ModelUsuario
+        {
+            try{
+                $sql = "SELECT * FROM usuario WHERE id = :id ";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id", $id_usuario);
+                $stmt->execute();
+
+                /**
+                 * Aqui é feito apenas fetch por que:
+                 * Quando fazemos uma busca por algo que deveria ser único no banco
+                 * (ex: email em uma tabela de usuários),
+                 * você espera que o SELECT retorne no máximo um registro.
+                 * 
+                 * com o fetchAll() ele enviaria um array de array associativos,
+                 * enviando varios registros, o que seria meio ruim pra esse caso, onde queremos apenas algo unico, que tem apenas um resultado e é performatico.
+                 */
+                $row = $stmt->fetch();
+
+                if($row){
+                    /**
+                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
+                     */
+                    return HydratorUsuario::fromRow($row);
+                }else{
+                    return null;
+                }
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorId: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorId: " . $e->getMessage() . "\n");
                 throw $e;
             }
             

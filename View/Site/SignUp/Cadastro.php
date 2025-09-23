@@ -25,7 +25,7 @@
     <?php endif; ?>
     <div class='cadastro_div'>
         <!-- formulario com metodo post que aponta para uma rota do rotas.php-->
-        <form class='cadastro_form' method="post" action="/signup/form/salvar">
+        <form class='cadastro_form' method="post" action="/signUp/form/salvar">
             <h1 class='cadastro_title'>Faça seu Cadastro</h1>
 
             <label for="nome" class='label_form'>

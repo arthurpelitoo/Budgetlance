@@ -36,7 +36,7 @@
                                     Home
                                 </a>
                             </li>
-                            <?php if(!isset($_SESSION['usuario_nome'])): ?>
+                            <?php if(!isset($_SESSION['logado'])): ?>
                             <li class="nav-li">
                                 <a href="/login" class="nav-btn" title="Fazer Login">
                                     Login
@@ -48,7 +48,7 @@
                                 </a>
                             </li>
                             <?php endif; ?>
-                            <?php if(isset($_SESSION['usuario_nome'])): ?>
+                            <?php if(isset($_SESSION['logado'])): ?>
                             <li class="nav-li">
                                 <div class="dropdown-container">
                                     <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
@@ -66,8 +66,10 @@
                                             } else {
                                                 $greeting = "Boa noite";
                                             }
+
+                                            $usuario = $_SESSION['logado'];
                                             
-                                            $userName = isset($_SESSION["usuario_nome"]) ? htmlspecialchars($_SESSION["usuario_nome"]) : "Usuário";
+                                            $userName = isset($_SESSION['logado']) ? htmlspecialchars($usuario->getNomeUsuario()) : "Usuário";
 
                                             // Exibe a saudação e o nome do usuário
                                             echo $greeting . ", " . $userName . "!";
@@ -81,7 +83,13 @@
                                             <a href="/perfil">Perfil</a>
                                         </li>
                                         <li>
-                                            <a href="/dashboard">Dashboard de Gerenciamento</a>
+                                            <a href="/dashboard">Dashboard Principal</a>
+                                        </li>
+                                        <li>
+                                            <a href="/dashboard/cliente">Clientes</a>
+                                        </li>
+                                        <li>
+                                            <a href="/dashboard/servico">Categoria de Serviços</a>
                                         </li>
                                         <li>
                                             <a href="/login/logout" id="lastBtn">Logout</a>

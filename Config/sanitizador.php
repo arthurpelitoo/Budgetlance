@@ -2,7 +2,7 @@
 
 namespace Budgetlance\Config;
 
-class sanitizador
+class Sanitizador
 {
     /**
      * Tudo o que chegar de item para esta classe em String

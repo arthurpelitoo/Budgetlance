@@ -12,7 +12,7 @@ abstract class Connection
 
     private static $instance;
 
-    public static function getConnection()
+    final public static function getConnection()
     {
         /**
          * Se

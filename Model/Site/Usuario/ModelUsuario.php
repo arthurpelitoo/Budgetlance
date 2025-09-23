@@ -130,24 +130,37 @@ class ModelUsuario
      * GETTERS:
      */
 
-        public function getIdUsuario():int{ return $this->id; }
+        public function getIdUsuario():?int{ return $this->id; }
 
         public function getNomeUsuario():string{ return $this->nm_usuario; }
 
         public function getEmailUsuario():string{ return $this->email; }
 
-        // salvar no banco
-        public function getSenhaHash():string
+        // Método privado para acessar o hash da senha, apenas para persistência
+        private function getSenhaParaPersistencia():string
         {
             return $this->senha;
         }
 
+        // Método público para permitir o acesso do DAO à senha de forma controlada
+        public function getSenhaHash(): string
+        {
+            return $this->getSenhaParaPersistencia();
+        }
+
         public function getTipoUsuario():string{ return $this->tipo_usuario; }
+
     /**
      * SETTERS:
      */
 
-        public function setIdUsuario(int $id) { $this->id = $id; }
+    /**
+     * Setter do ID do usuário.
+     * Este método é público pois é a forma do DAO e do Hydrator
+     * definirem o ID no objeto ModelUsuario após o objeto ser salvo
+     * ou carregado do banco de dados.
+     */
+        public function setIdUsuario(int $id):void { $this->id = $id; }
 
 }
 

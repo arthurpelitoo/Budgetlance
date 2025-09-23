@@ -5,12 +5,12 @@ namespace Budgetlance\Controller\Cliente;
  * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
  */
 
-use Budgetlance\Config\sanitizador;
+use Budgetlance\Config\Sanitizador;
 use Budgetlance\Controller\Controller;
 use Budgetlance\Dao\Site\Cliente\DaoCliente;
 use Budgetlance\Model\Site\Cliente\ModelCliente;
 
-class ControllerCliente extends Controller
+final class ControllerCliente extends Controller
 {
 
     /**
@@ -30,9 +30,9 @@ class ControllerCliente extends Controller
                 $email = $_POST['email'] ?? '';
 
                 return [
-                    'nome' => sanitizador::sanitizar($nome),
-                    'telefone' => sanitizador::sanitizar($telefone),
-                    'email' => sanitizador::sanitizar($email),
+                    'nome' => Sanitizador::sanitizar($nome),
+                    'telefone' => Sanitizador::sanitizar($telefone),
+                    'email' => Sanitizador::sanitizar($email),
                 ];
             } catch(\Exception $e){
                 /**
@@ -91,7 +91,8 @@ class ControllerCliente extends Controller
                     $email = $cleanData['email'];
 
                     // pega o id do usuário logado
-                    $idUsuario = $_SESSION['usuario_id'] ?? null;
+                    $usuario = $_SESSION['logado'];
+                    $idUsuario = $usuario->getIdUsuario() ?? null;
                     
                     /**
                      * usamos aqui um metodo de criar Cliente nos moldes da model para criar a base a ser inserida no banco.
@@ -152,14 +153,15 @@ class ControllerCliente extends Controller
              * faz a listagem para a tabela da pagina da dashboard de cliente.
              */
 
-            public function listarClientes():array
+            public function listarClientes(): ?array
             {
                 try{
 
                     parent::isProtected();
 
                     // pega o id do usuário logado
-                    $idUsuario = $_SESSION['usuario_id'] ?? null;
+                    $usuario = $_SESSION['logado'];
+                    $idUsuario = $usuario->getIdUsuario() ?? null;
 
                     $dao = new DaoCliente();
                     return $dao->buscarClientes($idUsuario);
@@ -216,7 +218,8 @@ class ControllerCliente extends Controller
                     $email = $cleanData['email'];
 
                     // pega o id do usuário logado
-                    $idUsuario = $_SESSION['usuario_id'] ?? null;
+                    $usuario = $_SESSION['logado'];
+                    $idUsuario = $usuario->getIdUsuario() ?? null;
 
                     // cria o cliente atualizado
                     $cliente = ModelCliente::createAndUpdateNewCliente($idUsuario, $nome, $telefone, $email);
@@ -275,7 +278,8 @@ class ControllerCliente extends Controller
                     parent::isProtected();
 
                     // pega o id do usuário logado
-                    $idUsuario = $_SESSION['usuario_id'] ?? null;
+                    $usuario = $_SESSION['logado'];
+                    $idUsuario = $usuario->getIdUsuario() ?? null;
 
                     $dao = new DaoCliente();
 
@@ -324,20 +328,20 @@ class ControllerCliente extends Controller
                 }
             }
 
-            public function deletarCliente():void
+            public function deletarCliente(int $id):void
             {
                 try{
                     parent::isProtected();
-
-                    $id = $_GET['id'] ?? null;
-                    $id_usuario = $_SESSION['usuario_id'] ?? null;
+                    
+                    $usuario = $_SESSION['logado'];
+                    $idUsuario = $usuario->getIdUsuario() ?? null;
                     
                     if(!$id){
                         throw new \Budgetlance\Config\validationException("Cliente inválido!", "Não foi possível identificar o cliente a ser excluído.");
                     }
 
                     $dao = new DaoCliente();
-                    $dao->deleteCliente((int) $id, $id_usuario);
+                    $dao->deleteCliente((int) $id, $idUsuario);
 
                     header("Location: /dashboard/cliente");
                     exit;

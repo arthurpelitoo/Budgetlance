@@ -14,6 +14,13 @@ document.getElementById('btnCancelar').addEventListener("click", () => {
 
 document.getElementById('btnConfirmar').addEventListener("click", () => {
     if(clienteParaExcluir){
-        window.location.href = `/dashboard/cliente/delete?id=${idClienteParaExcluir}`;
+        fetch(`/dashboard/cliente/${clienteParaExcluir}`, {
+            method: "DELETE"
+        })
+        .then(res => {
+            if (res.ok) {
+                location.reload();
+            }
+        });
     }
 });

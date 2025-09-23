@@ -6,7 +6,7 @@ use Budgetlance\Dao\Connection;
 use Budgetlance\Hydrator\Cliente\HydratorCliente;
 use Budgetlance\Model\Site\Cliente\ModelCliente;
 
-class DaoCliente extends Connection
+final class DaoCliente extends Connection
 {
 
     // evita erro de digitação na hora de puxar a tabela na query.
@@ -49,6 +49,36 @@ class DaoCliente extends Connection
      * Para procurar Cliente:
      */
 
+        /**
+         * APENAS PARA O FORMULARIO DE ORÇAMENTO.
+         */
+        public function buscarIdEClientePeloUsuario(int $id_usuario): ?array
+        {
+            try{
+                $sql = "SELECT id, nm_cliente FROM " . self::TABLE . " WHERE id_usuario = :id_usuario ";
+            
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id_usuario", $id_usuario);
+                $stmt->execute();
+
+                /**
+                 * O fetchAll() envia um array de array associativos,
+                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
+                 */
+                $rows = $stmt->fetchAll();
+
+                return $rows ?: null;
+                // aqui já é array puro apenas para resgatar em selects dentro de operações CRUD, o que não envolve regra de negocio mesmo
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+        }
+
         public function buscarClientes(int $id_usuario): ?array
         {
             try{
@@ -82,6 +112,18 @@ class DaoCliente extends Connection
             }
         }
 
+        //verificação de acesso ao orçamento
+        public function usuarioPossuiCadastro(int $id_usuario): bool
+        {
+            $sql = "SELECT 1 FROM " . self::TABLE . " WHERE id_usuario = :id_usuario LIMIT 1";
+            $stmt = Connection::getConnection()->prepare($sql);
+            $stmt->bindValue(":id_usuario", $id_usuario);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+        }
+
+        //pra realizar a recuperação de Dados para update
         public function buscarPeloId(int $id_usuario, int $id): ?ModelCliente
         {
             try{

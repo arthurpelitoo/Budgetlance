@@ -5,11 +5,12 @@
 
 .pageContainer{
     width: 100%;
-    /* background-image: url('/images/Site/Login/LoginBackground.jpg'); */
-    /* background-position: center;
+    background-image: url('/images/Site/Dashboard/ClienteDashboardBackground.avif');
+    background-position: center;
     background-size: cover;
-    background-repeat: no-repeat; */
-    height: 100%;
+    background-repeat: no-repeat;
+    height: 800px;
+    align-content: space-evenly;
 }
 
 .btn-add{
@@ -38,7 +39,7 @@
 .dashboard-container{
     margin: 24px;
     max-width: 900px;
-    border-radius: 5px;
+    border-radius: 10px 5px 5px 5px;
 }
 
 .dashboard{
@@ -57,6 +58,7 @@
 }
 
 .dashboard-budget-table {
+    display: inline-block;
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 16px;
@@ -104,6 +106,35 @@
     border-bottom: 2px solid var(--elementHardColor);
 }
 
+.dashboard-budget-table tbody tr td .btn_delete{
+    color: var(--tableDelete);
+    cursor: pointer;
+}
+
+.nav-button {
+    /* Remove a decoração de link padrão */
+    text-decoration: none; 
+    /* Define a cor de fundo e do texto */
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    /* Adiciona um preenchimento para parecer um botão */
+    padding: 12px 30px;
+    border-radius: 5px 0 5px 0;
+    font-weight: 800;
+    cursor: pointer;
+    /* Transição para um efeito suave ao passar o mouse */
+    transition: background-color 0.2s ease;
+    /* Centraliza o conteúdo (o ícone) */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre o ícone e o texto, se houver */
+}
+
+.nav-button:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
 /* Responsivo */
 @media(max-width:1000px){
 
@@ -141,7 +172,7 @@
 
     .dashboard-container{
         margin: 12px;
-        max-width: 150px;
+        max-width: 190px;
         border-radius: 5px;
     }
 

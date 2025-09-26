@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $viewData['title'] ?? 'Servicelance' ?></title>
+    <title><?= $viewData['title'] ?? 'Budgetlance' ?></title>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"></noscript>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet';">
@@ -92,7 +92,7 @@
                                             <a href="/dashboard/servico">Categoria de Serviços</a>
                                         </li>
                                         <li>
-                                            <a href="/login/logout" id="lastBtn">Logout</a>
+                                            <a href="/login/logout" id="lastBtn">Sair</a>
                                         </li>
                                     </ul>
                                 </div>

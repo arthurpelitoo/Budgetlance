@@ -12,7 +12,6 @@ class ModelCServico {
      * @param int $id_usuario Id do usuario
      * @param string $nome Nome do serviço
      * @param string $descricao Descrição do serviço
-     * @throws \InvalidArgumentException Se os parâmetros forem inválidos
      */
     public function __construct(?int $id_usuario, string $nome, ?string $descricao = null) {
         $this->id_usuario = $id_usuario;

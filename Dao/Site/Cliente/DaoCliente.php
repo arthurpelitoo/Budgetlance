@@ -5,6 +5,7 @@ namespace Budgetlance\Dao\Site\Cliente;
 use Budgetlance\Dao\Connection;
 use Budgetlance\Hydrator\Cliente\HydratorCliente;
 use Budgetlance\Model\Site\Cliente\ModelCliente;
+use PDO;
 
 final class DaoCliente extends Connection
 {
@@ -45,44 +46,14 @@ final class DaoCliente extends Connection
                 throw $e;
             }
         }
+    
     /**
-     * Para procurar Cliente:
+     * Para procurar todos os Clientes:
      */
-
-        /**
-         * APENAS PARA O FORMULARIO DE ORÇAMENTO.
-         */
-        public function buscarIdEClientePeloUsuario(int $id_usuario): ?array
-        {
-            try{
-                $sql = "SELECT id, nm_cliente FROM " . self::TABLE . " WHERE id_usuario = :id_usuario ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                return $rows ?: null;
-                // aqui já é array puro apenas para resgatar em selects dentro de operações CRUD, o que não envolve regra de negocio mesmo
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-        }
-
         public function buscarClientes(int $id_usuario): ?array
         {
             try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario ";
+                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario ORDER BY nm_cliente ASC";
             
                 $stmt = Connection::getConnection()->prepare($sql);
                 $stmt->bindValue(":id_usuario", $id_usuario);
@@ -111,19 +82,72 @@ final class DaoCliente extends Connection
                 throw $e;
             }
         }
+    
+    /**
+     * Para filtrar Clientes:
+     */
+        public function buscar(int $id_usuario, string $campo, string $valor): array {
+            
+            try{
+                $permitidos = ['nm_cliente', 'email', 'telefone'];
 
-        //verificação de acesso ao orçamento
-        public function usuarioPossuiCadastro(int $id_usuario): bool
+                if (!in_array($campo, $permitidos)) {
+                    throw new \Budgetlance\Config\ValidationException("Campo de busca inválido.", "Siga apenas os filtros prontos.");
+                }
+
+                $sql = "SELECT * FROM " . self::TABLE . " 
+                        WHERE id_usuario = :id_usuario 
+                        AND $campo LIKE :valor 
+                        ORDER BY nm_cliente ASC";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id_usuario", $id_usuario, PDO::PARAM_INT);
+                $stmt->bindValue(":valor", "%$valor%", PDO::PARAM_STR);
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return HydratorCliente::fromDatabase($rows);
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+        }
+    
+    /**
+     * Para atualizar Cliente:
+     */
+        public function updateCliente(ModelCliente $cliente):void
         {
-            $sql = "SELECT 1 FROM " . self::TABLE . " WHERE id_usuario = :id_usuario LIMIT 1";
-            $stmt = Connection::getConnection()->prepare($sql);
-            $stmt->bindValue(":id_usuario", $id_usuario);
-            $stmt->execute();
+            try{
+                $sql = "UPDATE " . self::TABLE . " SET nm_cliente = :nome, telefone = :telefone, email = :email WHERE id = :id AND id_usuario = :id_usuario ";
 
-            return (bool) $stmt->fetchColumn();
+                $stmt = Connection::getConnection()->prepare($sql);
+
+                $stmt->bindValue(":nome", $cliente->getNomeCliente());
+                $stmt->bindValue(":telefone", $cliente->getTelefoneCliente());
+                $stmt->bindValue(":email", $cliente->getEmailCliente());
+                $stmt->bindValue(":id", $cliente->getIdCliente());
+                $stmt->bindValue(":id_usuario", $cliente->getIdUsuario());
+
+                $stmt->execute();
+
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCliente: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCliente: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+            
         }
 
-        //pra realizar a recuperação de Dados para update
+    //pra realizar a recuperação de Dados para update
         public function buscarPeloId(int $id_usuario, int $id): ?ModelCliente
         {
             try{
@@ -163,136 +187,10 @@ final class DaoCliente extends Connection
             }
             
         }
-
-        public function buscarPorNome(int $id_usuario, string $nome): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND nm_cliente = :nm_cliente ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":nm_cliente", $nome);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorCliente::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-        }
         
-        public function buscarPorEmail(int $id_usuario, string $email): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND email = :email ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":email", $email);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorCliente::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorEmail: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorEmail: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-            
-        }
-
-        public function buscarPorTelefone(int $id_usuario, string $telefone): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND telefone = :telefone ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":telefone", $telefone);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorCliente::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorTelefone: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorTelefone: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-        }
-
-        public function updateCliente(ModelCliente $cliente):void
-        {
-            try{
-                $sql = "UPDATE " . self::TABLE . " SET nm_cliente = :nome, telefone = :telefone, email = :email WHERE id = :id AND id_usuario = :id_usuario ";
-
-                $stmt = Connection::getConnection()->prepare($sql);
-
-                $stmt->bindValue(":nome", $cliente->getNomeCliente());
-                $stmt->bindValue(":telefone", $cliente->getTelefoneCliente());
-                $stmt->bindValue(":email", $cliente->getEmailCliente());
-                $stmt->bindValue(":id", $cliente->getIdCliente());
-                $stmt->bindValue(":id_usuario", $cliente->getIdUsuario());
-
-                $stmt->execute();
-
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCliente: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCliente: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-            
-        }
-
+    /**
+     * Para deletar Cliente:
+     */
         public function deleteCliente(int $id, int $id_usuario): void
         {
             try{
@@ -314,5 +212,149 @@ final class DaoCliente extends Connection
             }
         }
 
+        /**
+         * APENAS PARA O FORMULARIO DE ORÇAMENTO.
+         */
+        public function buscarIdEClientePeloUsuario(int $id_usuario): ?array
+        {
+            try{
+                $sql = "SELECT id, nm_cliente FROM " . self::TABLE . " WHERE id_usuario = :id_usuario ";
+            
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id_usuario", $id_usuario);
+                $stmt->execute();
+
+                /**
+                 * O fetchAll() envia um array de array associativos,
+                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
+                 */
+                $rows = $stmt->fetchAll();
+
+                return $rows ?: null;
+                // aqui já é array puro apenas para resgatar em selects dentro de operações CRUD, o que não envolve regra de negocio mesmo
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarIdEClientePeloUsuario: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+        }
+
+        //verificação de acesso ao orçamento
+        public function usuarioPossuiCadastro(int $id_usuario): bool
+        {
+            $sql = "SELECT 1 FROM " . self::TABLE . " WHERE id_usuario = :id_usuario LIMIT 1";
+            $stmt = Connection::getConnection()->prepare($sql);
+            $stmt->bindValue(":id_usuario", $id_usuario);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+
+        }
+
+        // public function buscarPorNome(int $id_usuario, string $nome): ?array
+        // {
+        //     try{
+        //         $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND nm_cliente = :nm_cliente ";
+            
+        //         $stmt = Connection::getConnection()->prepare($sql);
+        //         $stmt->bindValue(":id_usuario", $id_usuario);
+        //         $stmt->bindValue(":nm_cliente", $nome);
+        //         $stmt->execute();
+
+        //         /**
+        //          * O fetchAll() envia um array de array associativos,
+        //          * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
+        //          */
+        //         $rows = $stmt->fetchAll();
+
+        //         if($rows){
+        //             /**
+        //              * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
+        //              */
+        //             return HydratorCliente::fromDatabase($rows);
+        //         }else{
+        //             return null;
+        //         }
+        //     } catch(\PDOException $e){
+                
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     } catch(\Exception $e){
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     }
+        // }
+        
+        // public function buscarPorEmail(int $id_usuario, string $email): ?array
+        // {
+        //     try{
+        //         $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND email = :email ";
+            
+        //         $stmt = Connection::getConnection()->prepare($sql);
+        //         $stmt->bindValue(":id_usuario", $id_usuario);
+        //         $stmt->bindValue(":email", $email);
+        //         $stmt->execute();
+
+        //         /**
+        //          * O fetchAll() envia um array de array associativos,
+        //          * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
+        //          */
+        //         $rows = $stmt->fetchAll();
+
+        //         if($rows){
+        //             /**
+        //              * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
+        //              */
+        //             return HydratorCliente::fromDatabase($rows);
+        //         }else{
+        //             return null;
+        //         }
+        //     } catch(\PDOException $e){
+                
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorEmail: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     } catch(\Exception $e){
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorEmail: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     }
+            
+        // }
+
+        // public function buscarPorTelefone(int $id_usuario, string $telefone): ?array
+        // {
+        //     try{
+        //         $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND telefone = :telefone ";
+            
+        //         $stmt = Connection::getConnection()->prepare($sql);
+        //         $stmt->bindValue(":id_usuario", $id_usuario);
+        //         $stmt->bindValue(":telefone", $telefone);
+        //         $stmt->execute();
+
+        //         /**
+        //          * O fetchAll() envia um array de array associativos,
+        //          * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
+        //          */
+        //         $rows = $stmt->fetchAll();
+
+        //         if($rows){
+        //             /**
+        //              * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
+        //              */
+        //             return HydratorCliente::fromDatabase($rows);
+        //         }else{
+        //             return null;
+        //         }
+        //     } catch(\PDOException $e){
+                
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorTelefone: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     } catch(\Exception $e){
+        //         error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorTelefone: " . $e->getMessage() . "\n");
+        //         throw $e;
+        //     }
+        // }
 
 }

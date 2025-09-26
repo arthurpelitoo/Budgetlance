@@ -109,7 +109,26 @@ final class ControllerSite extends Controller
         // nome da pasta/arquivo.php View para ser passado.
         $viewFile = "Dashboard/MainDashboard";
         $controllerOrcamento = new ControllerOrcamento();
-        $orcamentos = $controllerOrcamento->listarOrcamentos();
+
+        // pega o id do usuário logado
+        $usuario = $_SESSION['logado'];
+        $idUsuario = $usuario->getIdUsuario() ?? null;
+
+        $filtro = $_GET['filtro'] ?? null;
+        $pesquisa = !empty($_GET['pesquisa']) ? trim($_GET['pesquisa']) : null;
+        $operador = 'LIKE'; // Operador padrão para pesquisa de texto
+
+        if(isset($filtro)){
+            
+            // Se o filtro for valor, usa o operador do GET, senão, usa LIKE.
+            if ($filtro === 'valor' || $filtro === 'prazo' && isset($operador)) {
+                $operador = $_GET['operador'];
+            }
+            $orcamentos = $controllerOrcamento->listarOrcamentos($idUsuario, $filtro, $pesquisa, $operador);
+        }
+
+        $orcamentos = $controllerOrcamento->listarOrcamentos($idUsuario, $filtro, $pesquisa, $operador);
+        $pesquisou = $filtro && $pesquisa ? true : null;
 
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
@@ -124,6 +143,7 @@ final class ControllerSite extends Controller
                 JS_SITE_URL . "Dashboard/MainDashboard.js"
             ],
             "orcamentos" => $orcamentos,
+            "pesquisou" => $pesquisou,
         ];
 
         parent::renderSiteView($viewFile, $configGeralDaPagina);
@@ -135,9 +155,15 @@ final class ControllerSite extends Controller
         // nome da pasta/arquivo.php View para ser passado.
         $viewFile = "Dashboard/ClienteDashboard";
         $controllerCliente = new ControllerCliente();
-        $clientes = $controllerCliente->listarClientes();
 
-        
+        // pega o id do usuário logado
+        $usuario = $_SESSION['logado'];
+        $idUsuario = $usuario->getIdUsuario() ?? null;
+
+        $filtro = $_GET['filtro'] ?? null;
+        $pesquisa = !empty($_GET['pesquisa']) ? trim($_GET['pesquisa']) : null;
+
+        $clientes = $controllerCliente->listarClientes($idUsuario, $filtro, $pesquisa);
 
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
@@ -208,8 +234,17 @@ final class ControllerSite extends Controller
         parent::isProtected();
         // nome da pasta/arquivo.php View para ser passado.
         $viewFile = "Dashboard/CServicoDashboard";
+
         $controllerCServico = new ControllerCServico();
-        $cservicos = $controllerCServico->listarCategoriaServicos();
+
+        // pega o id do usuário logado
+        $usuario = $_SESSION['logado'];
+        $idUsuario = $usuario->getIdUsuario() ?? null;
+
+        $filtro = $_GET['filtro'] ?? null;
+        $pesquisa = !empty($_GET['pesquisa']) ? trim($_GET['pesquisa']) : null;
+
+        $cservicos = $controllerCServico->listarCategoriaServicos($idUsuario, $filtro, $pesquisa);
 
         
 
@@ -241,6 +276,7 @@ final class ControllerSite extends Controller
         if(isset($_GET['id']))
         {
             $controllerCServico = new ControllerCServico();
+            
             // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
             $cservico = $controllerCServico->pegarPeloId((int) $_GET['id']); // O (int) evita sqlInjection, sendo um type cast explícito. Ele converte o valor recebido (nesse caso, uma string que veio da URL) para o tipo inteiro.
             
@@ -283,8 +319,28 @@ final class ControllerSite extends Controller
         parent::isCompleted();
         // nome da pasta/arquivo.php View para ser passado.
         $viewFile = "Dashboard/OrcamentoDashboard";
+        
         $controllerOrcamento = new ControllerOrcamento();
-        $orcamentos = $controllerOrcamento->listarOrcamentos();
+
+        // pega o id do usuário logado
+        $usuario = $_SESSION['logado'];
+        $idUsuario = $usuario->getIdUsuario() ?? null;
+
+        $filtro = $_GET['filtro'] ?? null;
+        $pesquisa = !empty($_GET['pesquisa']) ? trim($_GET['pesquisa']) : null;
+        $operador = 'LIKE'; // Operador padrão para pesquisa de texto
+
+        if(isset($filtro)){
+            
+            // Se o filtro for valor, usa o operador do GET, senão, usa LIKE.
+            if ($filtro === 'valor' || $filtro === 'prazo' && isset($operador)) {
+                $operador = $_GET['operador'];
+            }
+            $orcamentos = $controllerOrcamento->listarOrcamentos($idUsuario, $filtro, $pesquisa, $operador);
+        }
+
+        $orcamentos = $controllerOrcamento->listarOrcamentos($idUsuario, $filtro, $pesquisa, $operador);
+        $pesquisou = $orcamentos ? true : null;
 
         // configuracao geral para a pagina a ser gerada. 
         $configGeralDaPagina = [
@@ -299,6 +355,7 @@ final class ControllerSite extends Controller
                 JS_SITE_URL . "Dashboard/OrcamentoDashboard.js"
             ],
             "orcamentos" => $orcamentos,
+            "pesquisou" => $pesquisou,
         ];
 
         parent::renderSiteView($viewFile, $configGeralDaPagina);

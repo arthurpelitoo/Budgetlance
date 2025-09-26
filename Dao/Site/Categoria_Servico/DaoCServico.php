@@ -6,6 +6,7 @@ use Budgetlance\Dao\Connection;
 use Budgetlance\Hydrator\Categoria_Servico\HydratorCliente;
 use Budgetlance\Hydrator\Categoria_Servico\HydratorCServico;
 use Budgetlance\Model\Site\Categoria_Servico\ModelCServico;
+use PDO;
 
 final class DaoCServico extends Connection
 {
@@ -113,15 +114,64 @@ final class DaoCServico extends Connection
             }
         }
 
-        //verificação de acesso ao orçamento
-        public function usuarioPossuiCadastro(int $id_usuario): bool
-        {
-            $sql = "SELECT 1 FROM " . self::TABLE . " WHERE id_usuario = :id_usuario LIMIT 1";
-            $stmt = Connection::getConnection()->prepare($sql);
-            $stmt->bindValue(":id_usuario", $id_usuario);
-            $stmt->execute();
+    /**
+     * Para filtrar Servicos:
+     */
+        public function buscar(int $id_usuario, string $campo, string $valor): array {
+            
+            try{
+                $permitidos = ['nm_servico', 'desc_servico'];
 
-            return (bool) $stmt->fetchColumn();
+                if (!in_array($campo, $permitidos)) {
+                    throw new \Budgetlance\Config\ValidationException("Campo de busca inválido.", "Siga apenas os filtros prontos.");
+                }
+
+                $sql = "SELECT * FROM " . self::TABLE . " 
+                        WHERE id_usuario = :id_usuario 
+                        AND $campo LIKE :valor 
+                        ORDER BY nm_servico ASC";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id_usuario", $id_usuario, PDO::PARAM_INT);
+                $stmt->bindValue(":valor", "%$valor%", PDO::PARAM_STR);
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return HydratorCServico::fromDatabase($rows);
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+        }
+
+        public function updateCategoriaServico(ModelCServico $servico):void
+        {
+            try{
+                $sql = "UPDATE " . self::TABLE . " SET nm_servico = :nome, desc_servico = :desc_servico WHERE id = :id AND id_usuario = :id_usuario ";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+
+                $stmt->bindValue(":nome", $servico->getNomeCategoriaServico());
+                $stmt->bindValue(":desc_servico", $servico->getDescricaoCategoriaServico());
+                $stmt->bindValue(":id", $servico->getIdCategoriaServico());
+                $stmt->bindValue(":id_usuario", $servico->getIdUsuario());
+
+                $stmt->execute();
+
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCategoria: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCategoria: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+            
         }
 
         //pra realizar a recuperação de Dados para update
@@ -165,65 +215,6 @@ final class DaoCServico extends Connection
             
         }
 
-        public function buscarPorNome(int $id_usuario, string $nome): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND nm_servico = :nm_servico ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":nm_servico", $nome);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCategoria e retornar isso pra ModelCategoria.
-                     */
-                    return HydratorCServico::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-        }
-
-        public function updateCategoriaServico(ModelCServico $servico):void
-        {
-            try{
-                $sql = "UPDATE " . self::TABLE . " SET nm_servico = :nome, desc_servico = :desc_servico WHERE id = :id AND id_usuario = :id_usuario ";
-
-                $stmt = Connection::getConnection()->prepare($sql);
-
-                $stmt->bindValue(":nome", $servico->getNomeCategoriaServico());
-                $stmt->bindValue(":desc_servico", $servico->getDescricaoCategoriaServico());
-                $stmt->bindValue(":id", $servico->getIdCategoriaServico());
-                $stmt->bindValue(":id_usuario", $servico->getIdUsuario());
-
-                $stmt->execute();
-
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCategoria: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de updateCategoria: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-            
-        }
-
         public function deleteCategoriaServico(int $id, int $id_usuario): void
         {
             try{
@@ -243,6 +234,17 @@ final class DaoCServico extends Connection
                 error_log("[" . date("Y-m-d H:i:s") . "] Erro de deleteCategoria: " . $e->getMessage() . "\n");
                 throw $e;
             }
+        }
+
+        //verificação de acesso ao orçamento
+        public function usuarioPossuiCadastro(int $id_usuario): bool
+        {
+            $sql = "SELECT 1 FROM " . self::TABLE . " WHERE id_usuario = :id_usuario LIMIT 1";
+            $stmt = Connection::getConnection()->prepare($sql);
+            $stmt->bindValue(":id_usuario", $id_usuario);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
         }
 
 

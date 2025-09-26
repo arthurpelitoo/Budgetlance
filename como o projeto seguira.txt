@@ -1,1 +1,0 @@
-Controller → Dao → fetch() → Hydrator → Model (objeto) → Controller → View

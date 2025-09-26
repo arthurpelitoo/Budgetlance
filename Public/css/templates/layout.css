@@ -285,6 +285,305 @@ main{
     position: relative;
 }
 
+.dashboard-section{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
+.dashboard-container{
+    margin: 24px;
+    max-width: 900px;
+    border-radius: 5px;
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+}
+
+.search-form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.text-form{
+    color: var(--textColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+}
+
+.search-form-div{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.search-group{
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.input_form{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    border: 5px solid var(--CTAColor);
+    border-radius: 5px 0 0 5px;
+    transition: ease-in-out 0.3s;
+    height: 34px;
+}
+
+.input_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.input_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.select_form{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    border: 5px solid var(--CTAColor);
+    transition: ease-in-out 0.3s;
+    height: 34px;
+}
+
+.select_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.select_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.btn_form{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    width: fit-content;
+    height: 34px;
+    font-size: 14px;
+    border-radius: 0 5px 5px 0;
+    padding: 8px;
+    border: 0;
+    cursor: pointer;
+    align-self: center;
+    transition: ease-in-out 0.3s;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn_form:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.dashboard-title{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+    text-align: left;
+}
+
+.dashboard-budget-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 16px;
+    width: 100%;
+    background-color: var(--tableBackground1);
+    border-radius: 5px;
+    /* Adiciona a barra de rolagem e define a altura máxima */
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+    box-shadow: 0 0 20px var(--elementHardColorAlpha);
+}
+
+.dashboard-budget-table thead tr {
+    font-family: var(--font-default);
+    background-color: var(--elementHardColor);
+    color: var(--textColor);
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Remove a borda das células e ajusta o padding */
+.dashboard-budget-table th,
+.dashboard-budget-table td {
+    padding: 12px 15px;
+}
+
+.dashboard-budget-table td{
+    font-family: var(--font-default);
+}
+
+.dashboard-budget-table td a{
+    text-decoration: none;
+}
+
+.dashboard-budget-table tbody tr {
+    border-bottom: 1px solid var(--tableLine);
+    cursor: pointer;
+}
+
+.dashboard-budget-table tbody tr:hover{
+    background-color: var(--CTAColor);
+}
+
+.dashboard-budget-table tbody tr:nth-of-type(even) {
+    background-color: var(--tableBackground2);
+}
+
+.dashboard-budget-table tbody tr:nth-of-type(even):hover {
+    background-color: var(--CTAColor);
+}
+
+.dashboard-budget-table tbody tr:last-of-type {
+    border-bottom: 2px solid var(--elementHardColor);
+}
+
+.dashboard-budget-table tbody tr td .btn_delete{
+    color: var(--tableDelete);
+    cursor: pointer;
+}
+
+.btn-add{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.3s;
+    width: fit-content;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn-add:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+#fullscreen-container{
+    display: none;
+    z-index: 11;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+}
+
+#fullscreen-container #fullscreen-details{
+    max-width: 90%;
+    max-height: 90%;
+    width: 60%;
+    display: block;
+    z-index: 12;
+    border-radius: 5px;
+}
+
+.title-details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.text-information{
+    font-family: var(--font-title);
+    font-size: 32px;
+    color: var(--textColor);
+    font-synthesis: none;
+}
+
+.closeIcon{
+    color: var(--btnBackgroundCtaColor);
+    font-size: x-large;
+    transition: ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+.closeIcon:hover{
+    color: var(--btnBackgroundCtaHoverColor);
+}
+
+.icon{
+    color: var(--btnBackgroundCtaColor);
+    font-size: x-large;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.container-details{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 5px 5px;
+    background-color: var(--elementHardColor);
+}
+
+/*
+.container-details: Isso seleciona o elemento pai que envolve todos os seus itens de detalhe. É a nossa base.
+:last-child: Este é um pseudo-seletor que encontra o último elemento de um grupo.
+:not(:nth-child(2n)): Este é o truque para identificar o que é ímpar.
+nth-child(2n) seleciona todos os elementos que são o 2º, 4º, 6º, etc. (ou seja, os elementos pares).
+:not() inverte a seleção, pegando tudo que não é par. Ou seja, ele pega o 1º, 3º, 5º, 7º, etc. (os elementos ímpares).
+.main-information:last-child: Por fim, esta parte seleciona o último item flexível (o div com a classe main-information) dentro do container que já passamos pelo filtro.
+*/
+
+/* Nova regra para lidar com o item ímpar */
+.container-details .main-information:last-child:not(:nth-child(2n)) {
+    flex-basis: 100% !important;
+    width: 100%;
+}
+
+.main-information{
+    background-color: var(--elementColor);
+    /* Define a largura de cada item, permitindo 2 por linha em telas maiores */
+    flex-basis: 50%; /* 50% menos metade do gap */
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border: 5px solid var(--elementHardColor);
+    gap: 5px;
+    padding: 48px;
+}
+
+.content-group{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    gap: 10px;
+}
+
+.text-details{
+    font-family: var(--font-default);
+    font-size: 22px;
+    color: var(--textColor);
+}
+
+.small-text{
+    font-family: var(--font-default);
+    font-size: 18px;
+    color: var(--textColor);
+}
+
 
 /* footer */
 
@@ -591,6 +890,25 @@ main{
         border-radius: 0;
     }
 
+    .dashboard-container{
+        margin: 12px;
+        max-width: 500px;
+        border-radius: 5px;
+    }
+
+    .title-details {
+        padding: 15px;
+    }
+
+    .container-details{
+        overflow-y: auto;
+        max-height: 500px;
+    }
+
+    .main-information{
+        flex-basis: 100%;
+        padding: 24px;
+    }
 
     .footer img{
         width: 35%;
@@ -601,3 +919,72 @@ main{
     }
 }
 
+@media(max-width:500px){
+
+    #fullscreen-container #fullscreen-details {
+        width: 90%;
+    }
+
+    .title-details {
+        padding: 15px;
+    }
+    
+    .text-information {
+        font-size: 24px;
+    }
+
+    .container-details{
+        overflow-y: auto;
+        max-height: 500px;
+    }
+
+    .main-information{
+        padding: 12px;
+    }
+
+    .input_form{
+        max-width: 150px;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+
+    .search-group{
+        margin-top: 5px;
+        display: block;
+    }
+
+    .select_form{
+        max-width: 150px;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+    .btn_form{
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+    .dashboard-container{
+        margin: 12px;
+        max-width: 300px;
+        border-radius: 5px;
+    }
+}
+
+@media(max-width:325px){
+    .dashboard-container{
+        margin: 12px;
+        max-width: 240px;
+        border-radius: 5px;
+    }
+    
+}
+
+@media(max-width:240px){
+    .dashboard-container{
+        margin: 12px;
+        max-width: 150px;
+        border-radius: 5px;
+    }
+}

@@ -172,17 +172,31 @@ final class ControllerOrcamento extends Controller
              * faz a listagem para a tabela da pagina da dashboard de Orcamento.
              */
 
-            public function listarOrcamentos(): ?array
+            public function listarOrcamentos(int $idUsuario, ?string $filtro = null, ?string $pesquisa = null, ?string $operador = null): ?array
             {
                 try{
 
                     parent::isProtected();
 
-                    // pega o id do usuário logado
-                    $usuario = $_SESSION['logado'];
-                    $idUsuario = $usuario->getIdUsuario() ?? null;
-
                     $dao = new DaoOrcamento();
+
+                    // Se tiver filtro e query, ele faz a filtragem
+                    if ($filtro && $pesquisa) {
+                        $mapa = [
+                            'cliente' => 'c.nm_cliente',
+                            'servico' => 's.nm_servico',
+                            'nome' => 'o.nm_orcamento',
+                            'descricao' => 'o.desc_orcamento',
+                            'valor' => 'o.valor',
+                            'prazo' => 'o.prazo',
+                            'status' => 'o.status'
+                        ];
+
+                        // Chama a busca com o operador correto
+                        return $dao->buscar($idUsuario, $mapa[$filtro], $pesquisa, $operador);
+                    }
+
+                    // Se não houver filtro ou pesquisa, mostra todos
                     return $dao->buscarOrcamento($idUsuario);
                 
                 }
@@ -477,8 +491,20 @@ final class ControllerOrcamento extends Controller
                         throw new \Budgetlance\Config\validationException("Orçamento inválido!", "Não foi possível identificar o Orçamento a ser excluído.");
                     }
 
+                    $orcamento = $this->pegarPeloId($id); 
+                    
+                    /**
+                     * se ele ver que não procede, entrega erro
+                     */
+                    if (!$orcamento) {
+                        $_SESSION['errorTitle'] = "Erro no orçamento!";
+                        $_SESSION['error'] = "Nenhum orçamento selecionado.";
+                        header("Location: /dashboard/orcamento");
+                        exit;
+                    }
+
                     $dao = new DaoOrcamento();
-                    $dao->deleteOrcamento((int) $id, $idUsuario);
+                    $dao->deleteOrcamento($id, $idUsuario);
 
                     header("Location: /dashboard/orcamento");
                     exit;

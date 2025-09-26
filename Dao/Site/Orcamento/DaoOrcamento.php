@@ -109,6 +109,79 @@ final class DaoOrcamento extends Connection
                 throw $e;
             }
         }
+        
+    /**
+     * Para filtrar Orçamentos:
+     */
+        public function buscar(int $id_usuario, string $campo, string $valor, string $operador = 'LIKE'): array {
+            
+            try{
+                // Validar o campo e o operador para evitar injeção de SQL.
+                // Aqui, o 'mapa' deve ser definido para conter as colunas permitidas.
+                $permitidos = ['c.nm_cliente', 's.nm_servico', 'o.nm_orcamento', 'o.desc_orcamento', 'o.valor', 'o.prazo', 'o.status'];
+                $operadoresPermitidos = ['=', '>', '<', 'LIKE'];
+
+                if (!in_array($campo, $permitidos) || !in_array($operador, $operadoresPermitidos)) {
+                    throw new \Budgetlance\Config\ValidationException("Campo ou operador de busca inválido.", "Siga apenas os filtros prontos.");
+                }
+
+                // A query SQL agora usa o operador dinamicamente
+                $sql = "
+                    SELECT                             
+                    o.id,                             
+                    o.id_cliente,                    
+                    o.id_usuario,                    
+                    o.id_cs,                         
+                    o.nm_orcamento,                  
+                    o.desc_orcamento,                
+                    o.valor,                         
+                    o.prazo,                         
+                    o.status,                        
+                    c.nm_cliente,                    
+                    s.nm_servico                     
+                    FROM                               
+                    orcamento o                      
+                    JOIN cliente c ON                  
+                    o.id_cliente = c.id              
+                    JOIN categoria_servico s ON        
+                    o.id_cs = s.id                   
+                    WHERE o.id_usuario = :id_usuario ";
+
+                // Adiciona a cláusula WHERE de forma dinâmica.
+                // Para 'LIKE', adicionamos os curingas. Para outros, não.
+                if ($operador === 'LIKE') {
+                    $sql .= " AND $campo LIKE :valor ";
+                } else {
+                    $sql .= " AND $campo $operador :valor ";
+                }
+
+                $sql .= " ORDER BY c.nm_cliente ASC";
+
+                $stmt = Connection::getConnection()->prepare($sql);
+                $stmt->bindValue(":id_usuario", $id_usuario, PDO::PARAM_INT);
+
+                // Adiciona os curingas apenas para buscas com LIKE
+                if ($operador === 'LIKE') {
+                    $stmt->bindValue(":valor", "%$valor%", PDO::PARAM_STR);
+                } else {
+                    $stmt->bindValue(":valor", $valor, PDO::PARAM_STR);
+                }
+                
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return HydratorOrcamento::fromDatabase($rows);
+                
+            } catch(\PDOException $e){
+                
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            } catch(\Exception $e){
+                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscar: " . $e->getMessage() . "\n");
+                throw $e;
+            }
+        }
 
         //pra realizar a recuperação de Dados para update
         public function buscarPeloId(int $id_usuario, int $id): ?ModelOrcamento
@@ -149,109 +222,6 @@ final class DaoOrcamento extends Connection
                 throw $e;
             }
             
-        }
-
-        public function buscarPorNome(int $id_usuario, string $nome): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND nm_orcamento = :nm_orcamento ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":nm_orcamento", $nome);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorOrcamento::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorNome: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-        }
-        
-        public function buscarPorDescricao(int $id_usuario, string $descricao): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND desc_orcamento = :desc_orcamento ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":desc_orcamento", $descricao);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorOrcamento::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorDescricao: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorDescricao: " . $e->getMessage() . "\n");
-                throw $e;
-            }
-            
-        }
-
-        public function buscarPorValor(int $id_usuario, string $valor): ?array
-        {
-            try{
-                $sql = "SELECT * FROM " . self::TABLE . " WHERE id_usuario = :id_usuario AND valor = :valor ";
-            
-                $stmt = Connection::getConnection()->prepare($sql);
-                $stmt->bindValue(":id_usuario", $id_usuario);
-                $stmt->bindValue(":valor", $valor);
-                $stmt->execute();
-
-                /**
-                 * O fetchAll() envia um array de array associativos,
-                 * enviando varios registros, bom nesse caso, onde queremos os resultados especificos.
-                 */
-                $rows = $stmt->fetchAll();
-
-                if($rows){
-                    /**
-                     * ele vai retornar os dados da query do banco para o Hydrator transformar o array associativo em objeto ModelCliente e retornar isso pra ModelCliente.
-                     */
-                    return HydratorOrcamento::fromDatabase($rows);
-                }else{
-                    return null;
-                }
-            } catch(\PDOException $e){
-                
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorValor: " . $e->getMessage() . "\n");
-                throw $e;
-            } catch(\Exception $e){
-                error_log("[" . date("Y-m-d H:i:s") . "] Erro de buscarPorValor: " . $e->getMessage() . "\n");
-                throw $e;
-            }
         }
 
         public function updateOrcamento(ModelOrcamento $orcamento):void

@@ -153,17 +153,28 @@ final class ControllerCliente extends Controller
              * faz a listagem para a tabela da pagina da dashboard de cliente.
              */
 
-            public function listarClientes(): ?array
+            public function listarClientes(int $idUsuario, ?string $filtro = null, ?string $pesquisa = null): ?array
             {
                 try{
 
                     parent::isProtected();
 
-                    // pega o id do usuário logado
-                    $usuario = $_SESSION['logado'];
-                    $idUsuario = $usuario->getIdUsuario() ?? null;
-
                     $dao = new DaoCliente();
+
+                    // se tiver filtro e query ele faz a filtragem e lista o que foi priorizado
+                    if($filtro && $pesquisa){
+                        $mapa = [
+                            'nome' => 'nm_cliente',
+                            'telefone' => 'telefone',
+                            'email' => 'email'
+                        ];
+
+                        if(isset($mapa[$filtro])){
+                            return $dao->buscar($idUsuario, $mapa[$filtro], $pesquisa);
+                        }
+                    }
+
+                    // se não, mostra todos de qualquer maneira.
                     return $dao->buscarClientes($idUsuario);
                 
                 }
@@ -340,8 +351,21 @@ final class ControllerCliente extends Controller
                         throw new \Budgetlance\Config\validationException("Cliente inválido!", "Não foi possível identificar o cliente a ser excluído.");
                     }
 
+                    // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
+                    $cliente = $this->pegarPeloId($id); 
+                    
+                    /**
+                     * se ele ver que não procede, entrega erro
+                     */
+                    if (!$cliente) {
+                        $_SESSION['errorTitle'] = "Erro no cliente!";
+                        $_SESSION['error'] = "Nenhum cliente selecionado.";
+                        header("Location: /dashboard/cliente");
+                        exit;
+                    }
+
                     $dao = new DaoCliente();
-                    $dao->deleteCliente((int) $id, $idUsuario);
+                    $dao->deleteCliente($id, $idUsuario);
 
                     header("Location: /dashboard/cliente");
                     exit;

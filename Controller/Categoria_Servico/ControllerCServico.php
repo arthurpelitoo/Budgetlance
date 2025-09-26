@@ -150,17 +150,27 @@ final class ControllerCServico extends Controller
              * faz a listagem para a tabela da pagina da dashboard de CategoriaServico.
              */
 
-            public function listarCategoriaServicos(): ?array
+            public function listarCategoriaServicos(int $idUsuario, ?string $filtro = null, ?string $pesquisa = null): ?array
             {
                 try{
 
                     parent::isProtected();
 
-                    // pega o id do usuário logado
-                    $usuario = $_SESSION['logado'];
-                    $idUsuario = $usuario->getIdUsuario() ?? null;
-
                     $dao = new DaoCServico();
+
+                    // se tiver filtro e query ele faz a filtragem e lista o que foi priorizado
+                    if($filtro && $pesquisa){
+                        $mapa = [
+                            'nome' => 'nm_servico',
+                            'descricao' => 'desc_servico',
+                        ];
+
+                        if(isset($mapa[$filtro])){
+                            return $dao->buscar($idUsuario, $mapa[$filtro], $pesquisa);
+                        }
+                    }
+
+                    // se não, mostra todos de qualquer maneira.
                     return $dao->buscarCategoriaServico($idUsuario);
                 
                 }
@@ -336,8 +346,21 @@ final class ControllerCServico extends Controller
                         throw new \Budgetlance\Config\validationException("Categoria de Servico inválido!", "Não foi possível identificar a Categoria de Servico a ser excluída.");
                     }
 
+                    // vai retornar as informações pro formulario por meio do ID que é recebido via URL. (pra funcao UPDATE).
+                    $cservico = $this->pegarPeloId($id); 
+                    
+                    /**
+                     * se ele ver que não procede, entrega erro
+                     */
+                    if (!$cservico) {
+                        $_SESSION['errorTitle'] = "Erro na categoria de serviços!";
+                        $_SESSION['error'] = "Nenhum serviço selecionado.";
+                        header("Location: /dashboard/servico");
+                        exit;
+                    }
+
                     $dao = new DaoCServico();
-                    $dao->deleteCategoriaServico((int) $id, $idUsuario);
+                    $dao->deleteCategoriaServico($id, $idUsuario);
 
                     header("Location: /dashboard/servico");
                     exit;

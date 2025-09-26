@@ -50,6 +50,91 @@
     gap: 16px;
 }
 
+.search-form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.text-form{
+    color: var(--textColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+}
+
+.search-form-div{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.search-group{
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+}
+
+
+.input_form{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    border: 5px solid var(--CTAColor);
+    border-radius: 5px 0 0 5px;
+    transition: ease-in-out 0.3s;
+    height: 34px;
+}
+
+.input_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.input_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.select_form{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+    background-color: var(--elementHardColor);
+    padding: 3px;
+    border: 5px solid var(--CTAColor);
+    transition: ease-in-out 0.3s;
+    height: 34px;
+}
+
+.select_form:hover{
+    border: 5px solid var(--CTAHoverColor);
+}
+
+.select_form::placeholder{
+    font-family: var(--font-default);
+    color: var(--btnAndInputTextColor);
+}
+
+.btn_form{
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnAndInputCTATextColor);
+    font-family: var(--font-default);
+    width: fit-content;
+    height: 34px;
+    font-size: 14px;
+    border-radius: 0 5px 5px 0;
+    padding: 8px;
+    border: 0;
+    cursor: pointer;
+    align-self: center;
+    transition: ease-in-out 0.3s;
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+.btn_form:hover{
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+
 .dashboard-title{
     font-family: var(--font-default);
     font-size: 18px;
@@ -138,14 +223,41 @@
 /* Responsivo */
 @media(max-width:1000px){
 
+    .pageContainer{
+        height: 100%;
+    }
+
     .dashboard-container{
         margin: 12px;
         max-width: 500px;
         border-radius: 5px;
     }
+
 }
 
 @media(max-width:500px){
+
+    .input_form{
+        max-width: 150px;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+
+    .search-group{
+        margin-top: 5px;
+        display: block;
+    }
+
+    .select_form{
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+    .btn_form{
+        margin-top: 5px;
+        border-radius: 5px;
+    }
 
     .dashboard-budget-table{
         display: block;

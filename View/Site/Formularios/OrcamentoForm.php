@@ -136,7 +136,7 @@
                     
                     <div class="form_field">
                         <label for="status" class="label_form">
-                            Prazo do Orçamento*:
+                            Status do Orçamento*:
                         </label>
                         <select class='input_form' name="status" id="status" name="status">
                             <option value="pendente" <?= $orcamento && $orcamento->getStatusOrcamento() === "pendente" ? 'selected' : '' ?> >Pendente</option>

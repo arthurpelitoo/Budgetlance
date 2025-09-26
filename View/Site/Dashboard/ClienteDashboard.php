@@ -52,16 +52,22 @@
 
                     <?php if(!empty($clientes)): ?>
 
-                    <form method="get" action="/dashboard/cliente">
-                        <input type="text" name="query" placeholder="Pesquisar..." >
-
-                        <select name="filtro">
-                            <option value="nome">Nome</option>
-                            <option value="email">Email</option>
-                            <option value="telefone">Telefone</option>
-                        </select>
-
-                        <button type="submit">Buscar</button>
+                    <form class="search-form" method="get" action="/dashboard/cliente">
+                        <h4 class="text-form">Pesquise usando filtros para listagens precisas!</h4>
+                        <div class="search-form-div">
+                            <div class="search-group">
+                                <input class="input_form" type="text" name="pesquisa" placeholder="Pesquisar..." >
+                                <select class="select_form" name="filtro">
+                                    <option value="">Filtrar por:</option>
+                                    <option value="nome">Nome</option>
+                                    <option value="telefone">Telefone</option>
+                                    <option value="email">Email</option>
+                                </select>
+                                <button class="btn_form" type="submit">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </div>
                     </form>
 
                     <table class="dashboard-budget-table">
@@ -76,12 +82,18 @@
                             </thead>
                             <tbody>
                                 <?php foreach($clientes as $cliente): ?>
-                                <tr>
-                                    <td><a class="btn_delete" onclick="confirmarExclusao(<?= $cliente->getIdCliente() ?>)">X</a></td>
+                                <tr
+                                    onclick="openFullScreen(this)"
+                                    data-key="<?= htmlspecialchars($cliente->getIdCliente()) ?>"
+                                    data-nome="<?= htmlspecialchars($cliente->getNomeCliente()) ?>"
+                                    data-telefone="<?= htmlspecialchars($cliente->getTelefoneCliente()) ?>"
+                                    data-email="<?= htmlspecialchars($cliente->getEmailCliente()) ?>"
+                                >
+                                    <td><a class="btn_delete" onclick="confirmarExclusao(<?= htmlspecialchars($cliente->getIdCliente()) ?>)"><i class="fa-solid fa-xmark"></i></a></td>
                                     <td><?= htmlspecialchars($cliente->getNomeCliente()) ?></td>
                                     <td><?= htmlspecialchars($cliente->getTelefoneCliente()) ?></td>
                                     <td><?= htmlspecialchars($cliente->getEmailCliente()) ?></td>
-                                    <td><a href="/dashboard/cliente/form?id=<?= $cliente->getIdCliente() ?>">Editar</a></td>
+                                    <td><a href="/dashboard/cliente/form?id=<?= htmlspecialchars($cliente->getIdCliente()) ?>">Editar</a></td>
                                 </tr>
                                 <?php endforeach ?>
                             </tbody>
@@ -101,3 +113,41 @@
         </section>
     </section>
 </main>
+<div id="fullscreen-container" style="display: none;">
+    <div class="contentBox" id="fullscreen-details">
+        <div class="title-details">
+            <h2 class="text-information">Detalhamento do Cliente</h2>
+            <a class="closeIcon" onclick="closeFullScreen()"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+        <div class="container-details">
+            <div class="main-information">
+                <div class="content-group">
+                    <i class="icon fa-solid fa-pen-to-square"></i>
+                    <h2 class="text-details">Nome do Cliente:</h2>
+                </div>
+                <h3 class="small-text" id="nome"></h3>
+            </div>
+            <div class="main-information">
+                <div class="content-group">
+                    <i class="icon fa-solid fa-mobile"></i>
+                    <h2 class="text-details">Telefone do Cliente:</h2>
+                </div>
+                <h3 class="small-text" id="telefone"></h3>
+            </div>
+            <div class="main-information">
+                <div class="content-group">
+                    <i class="icon fa-solid fa-envelope"></i>
+                    <h2 class="text-details">Email do Cliente:</h2>
+                </div>
+                <h3 class="small-text" id="email"></h3>
+            </div>
+            <div class="main-information">
+                <div class="content-group">
+                    <i class="icon fa-solid fa-file-pen"></i>
+                    <h2 class="text-details">Deseja editar o Cliente?</h2>
+                </div>
+                <a class="btn-add" id="editar">Editar Cliente</a>
+            </div>
+        </div>
+    </div>
+</div>

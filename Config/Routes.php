@@ -21,10 +21,13 @@ final class Routes
      * 
      * @param string $method  O método HTTP da rota (GET, POST, PUT, DELETE...).
      * @param string $pattern O padrão da URL, escrito em regex.
-     * @param callable $action A função/closure/controlador que vai ser chamado.
+     * @param callable $action O metodo de algum controller que vai ser chamado.
      */
     public function add(string $method, string $pattern, callable $action): void
     {
+        /**
+         * ele guarda todas as rotas dentro de um array associativo
+         */
         $this->routes[] = [
             // Normaliza o método HTTP para sempre maiúsculo (ex: get → GET).
             'method'  => strtoupper($method),
@@ -49,7 +52,7 @@ final class Routes
      */
     public function dispatch(string $url, string $method): void
     {
-        // Percorre todas as rotas registradas
+        // Percorre todas as rotas registradas dentro do array associativo
         foreach ($this->routes as $route) {
 
             // Verifica se o método HTTP bate com o esperado

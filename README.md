@@ -12,7 +12,7 @@
 
 * PHP:
     * Versão: idealmente PHP 8.0 ou superior
-  Extensões necessárias:
+ * Extensões necessárias:
     * pdo_mysql (para conexão com MySQL via PDO).
 
 * MySQL:
